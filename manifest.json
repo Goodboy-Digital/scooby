@@ -1,0 +1,17 @@
+{
+    "manifest_version": 2,
+    "name": "WebGL Texture Monitor",
+    "version": "1.0.0",
+    "description": "",
+    "background": {
+        "persistent": true,
+        "scripts": ["src/chrome_extension/background.js"]
+    },
+    "permissions": [
+        "contextMenus",
+        "activeTab"
+    ],
+    "web_accessible_resources": [
+        "src/chrome_extension/textureMonitor.css"
+    ]
+}
