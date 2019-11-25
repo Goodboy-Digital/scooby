@@ -1,6 +1,6 @@
 $warning-red-color: rgb(214, 41, 41);
 $white-color: rgb(238, 238, 238);
-$alpha-black-color: hsla(0, 0, 0, 0.9);
+$alpha-black-color: hsla(0, 0, 0, 0.7);
 $blue-glow-color: rgb(18, 138, 185);
 
 html{
@@ -36,11 +36,11 @@ body{
     left: 0;
     bottom: 0;
     width: 100vw;
-    display: grid;
     transform: translateY(100%);
     transition: transform 0.25s ease-in-out;
     user-select: none;
-
+    height: 17.5rem;
+    padding: 1rem;
 
     .monitor-toggle{
         position: absolute;
@@ -85,12 +85,12 @@ body{
 
     .entities-wrapper{
         display: flex;
-        flex-wrap: nowrap;
-        overflow-x: auto;
-        margin: 0.6rem 1rem;
+        flex-wrap: wrap;
+        overflow-y: auto;
+        height: 100%;
 
         .texture-entity{
-            margin: 1rem 0.8rem;
+            margin: 0.8rem;
             position: relative;
 
             .texture-wrapper{
@@ -149,7 +149,39 @@ body{
                 transition: opacity 0.1s ease-out;
 
                 h3{
-                    padding: 0.25rem;
+                    max-width: 7rem;
+                    word-wrap: break-word;
+                }
+
+                div{
+                    position: relative;
+                    background-color: $blue-glow-color;
+                    padding: 0.5rem 1.5rem;
+                    margin-top: 1rem;
+                    border-radius: 1rem;
+                    transition: transform 0.1s ease-out;
+                    cursor: pointer;
+
+                    &::before{
+                        content: '';
+                        position: absolute;
+                        top: 0;
+                        bottom: 0;
+                        left: 0;
+                        right: 0;
+                        border-radius: inherit;
+                        box-shadow: 0 0.5rem 0.6rem hsla(0, 0, 0, 0.5);
+                        opacity: 0;
+                        transition: opacity 0.1s ease-out;
+                    }
+
+                    &:hover{
+                        transform: translateY(-0.1rem);
+
+                        &::before{
+                            opacity: 1;
+                        }
+                    }
                 }
             }
             
@@ -201,14 +233,14 @@ body{
         overflow: hidden;
         pointer-events: none;
 
-        #edge-shadow-left{
+        #edge-shadow-top{
             position: absolute;
-            top: 0;
-            left: 1rem;
-            bottom: 0;
-            box-shadow: 0.8rem 0 3rem -0.5rem $blue-glow-color;
-            width: 100px;
-            transform: translateX(-100%);
+            top: 0rem;
+            left: 0rem;
+            right: 0rem;
+            box-shadow: 0.3rem 1.5rem 1.5rem -0.7rem $blue-glow-color;
+            height: 100px;
+            transform: translateY(-100%);
             transition: opacity 0.2s ease-out;
 
             &.hidden{
@@ -216,21 +248,20 @@ body{
             }
         }
 
-        #edge-shadow-right{
+        #edge-shadow-bottom{
             position: absolute;
-            top: 0;
-            right: 1rem;
             bottom: 0;
-            box-shadow: -0.8rem 0 3rem -0.5rem $blue-glow-color;
-            width: 100px;
-            transform: translateX(100%);
+            left: 0;
+            right: 0;
+            box-shadow: 0.3rem -1.5rem 1.5rem -0.7rem $blue-glow-color;
+            height: 100px;
+            transform: translateY(100%);
             transition: opacity 0.2s ease-out;
 
             &.hidden{
                 opacity: 0;
             }
         }
-
     }
 }
 
