@@ -45,24 +45,22 @@ toggle.onclick = function () {
 };
 var isDown = false;
 var startY;
-entitiesWrapper.addEventListener('mousedown', function (e) {
+var initialScroll;
+// Set up desktop drag to scroll
+document.addEventListener('mousedown', function (e) {
+    if (!(e.target === entitiesWrapper || entitiesWrapper.contains(e.target)))
+        return;
     isDown = true;
-    startY = entitiesWrapper.scrollTop;
+    startY = e.pageY;
+    initialScroll = entitiesWrapper.scrollTop;
 });
-entitiesWrapper.addEventListener('mouseleave', function (e) {
+document.addEventListener('mouseup', function (e) {
     isDown = false;
 });
-entitiesWrapper.addEventListener('mouseup', function (e) {
-    isDown = false;
-});
-entitiesWrapper.addEventListener('mousemove', function (e) {
+document.addEventListener('mousemove', function (e) {
     if (!isDown)
         return;
-    // console.log("Moves",e);
-    e.preventDefault();
-    // const y = e.pageY - entitiesWrapper.scrollTop;
-    // const walk = e.pageY - startY;
-    // entitiesWrapper.scrollTo(0,entitiesWrapper.scrollTop + e.pageY);
+    entitiesWrapper.scrollTo(0, initialScroll + (startY - e.pageY));
 });
 entitiesWrapper.onscroll = function (e) {
     e.preventDefault();
@@ -111,8 +109,8 @@ HTMLCanvasElement.prototype.getContext = function (type, options) {
             var glTexture = arguments[0];
             var data = textureMap.get(glTexture);
             // entitiesWrapper.removeChild(data.textureEntity);
-            data.textureEntity.style.opacity = '0.5';
-            textureMap["delete"](glTexture);
+            data.textureEntity.classList.add('tinted');
+            // textureMap.delete(glTexture);
             calculateSize();
             return WebGLRenderingContext.prototype.deleteTexture.apply(this, arguments);
         };

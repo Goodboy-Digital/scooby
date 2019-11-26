@@ -39,7 +39,7 @@ body{
     transform: translateY(100%);
     transition: transform 0.25s ease-in-out;
     user-select: none;
-    height: 17.5rem;
+    height: 17rem;
     padding: 1rem;
 
     .monitor-toggle{
@@ -84,13 +84,17 @@ body{
     }
 
     .entities-wrapper{
-        display: flex;
-        flex-wrap: wrap;
         overflow-y: auto;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, 9.375rem);
         height: 100%;
+        width: 100%;
+        position: relative;
+        justify-content: center;
+        gap: 1rem;
+        padding: 0.79rem;
 
         .texture-entity{
-            margin: 0.8rem;
             position: relative;
 
             .texture-wrapper{
@@ -121,6 +125,7 @@ body{
                 padding-left: 0.6rem;;
                 color: $white-color;
                 border-radius: 0 0 0.3rem 0.3rem;
+                width: 100%;
 
                 h4{
                     margin-bottom: 0.2rem;
@@ -147,6 +152,7 @@ body{
                 z-index: 1;
                 opacity: 0;
                 transition: opacity 0.1s ease-out;
+                text-align: center;
 
                 h3{
                     max-width: 7rem;
@@ -202,8 +208,22 @@ body{
                 .extra-info,
                 &::after{
                     opacity: 1;
-                } 
+                }
             }
+
+            &.tinted{
+
+                pointer-events: none;
+
+                &::after{
+                    background-color: $warning-red-color;
+                    opacity: 0.65;
+                    .extra-info{
+                        opacity: 0;
+                    }
+                }
+            }
+
         }
 
         &::-webkit-scrollbar-track{
@@ -228,20 +248,21 @@ body{
         position: absolute;
         top: 0;
         bottom: 0;
-        left: 0;
-        right: 0;
+        left: 1.5rem;
+        right: 2.5rem;
         overflow: hidden;
         pointer-events: none;
 
         #edge-shadow-top{
             position: absolute;
-            top: 0rem;
-            left: 0rem;
-            right: 0rem;
-            box-shadow: 0.3rem 1.5rem 1.5rem -0.7rem $blue-glow-color;
+            top: 1rem;
+            left: 0;
+            right: 0;
+            box-shadow: 0.3rem 2.2rem 1.2rem -1.5rem hsla(0, 0, 0, 0.8);
             height: 100px;
             transform: translateY(-100%);
             transition: opacity 0.2s ease-out;
+            opacity: 0.7;
 
             &.hidden{
                 opacity: 0;
@@ -250,13 +271,14 @@ body{
 
         #edge-shadow-bottom{
             position: absolute;
-            bottom: 0;
+            bottom: 1rem;
             left: 0;
             right: 0;
-            box-shadow: 0.3rem -1.5rem 1.5rem -0.7rem $blue-glow-color;
+            box-shadow: 0.3rem -2.2rem 1.2rem -1.5rem hsla(0, 0, 0, 0.8);
             height: 100px;
             transform: translateY(100%);
             transition: opacity 0.2s ease-out;
+            opacity: 0.7;
 
             &.hidden{
                 opacity: 0;
@@ -264,4 +286,3 @@ body{
         }
     }
 }
-
