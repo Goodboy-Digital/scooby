@@ -1,9 +1,10 @@
 "use strict";
-exports.__esModule = true;
-var pixi_js_1 = require("pixi.js");
-require("../../styles/textureMonitor.css");
+// exports.__esModule = true;
+// var pixi_js_1 = require("pixi.js");
+// var pixi_js_1 = require("https://cdnjs.cloudflare.com/ajax/libs/pixi.js/5.1.5/pixi.min.js");
+// require("../../styles/textureMonitor.css");
 var realFunction = HTMLCanvasElement.prototype.getContext;
-pixi_js_1.settings.PREFER_ENV = pixi_js_1.ENV.WEBGL;
+// pixi_js_1.settings.PREFER_ENV = pixi_js_1.ENV.WEBGL;
 var textureMap = new Map();
 // Setting up DOM and utility variables for CSS manipulations
 var toggle = document.createElement('div');

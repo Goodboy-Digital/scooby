@@ -4,11 +4,10 @@
     "version": "1.0.0",
     "description": "",
     "content_scripts": [{
+        "matches": ["<all_urls>"],
         "css": ["src/chrome_extension/textureMonitor.css"],
-        "js": ["src/chrome_extension/texture-monitor.js"]
-    }],
-    "permissions": [
-        "contextMenus",
-        "activeTab"
-    ]
+        "js": [
+            "src/chrome_extension/texture-monitor.js"
+        ]
+    }]
 }
