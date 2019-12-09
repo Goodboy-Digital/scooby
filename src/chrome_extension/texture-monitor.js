@@ -5,7 +5,7 @@ require("../../styles/textureMonitor.css");
 var realFunction = HTMLCanvasElement.prototype.getContext;
 pixi_js_1.settings.PREFER_ENV = pixi_js_1.ENV.WEBGL;
 var textureMap = new Map();
-// Setting up texture monitor DOM elements
+// Setting up DOM and utility variables for CSS manipulations
 var toggle = document.createElement('div');
 var textureMonitorContainer = document.createElement('div');
 var edgeShadowsContainer = document.createElement('div');
@@ -15,57 +15,17 @@ var entitiesWrapper = document.createElement('div');
 var toggleText = document.createElement('h3');
 var gpuFootprintText = document.createElement('h3');
 var toggleChevron = document.createElement('h3');
-toggle.classList.add('monitor-toggle');
-textureMonitorContainer.id = 'texture-monitor-container';
-edgeShadowsContainer.id = 'edge-shadows-container';
-edgeShadowsTop.id = 'edge-shadow-top';
-edgeShadowsBottom.id = 'edge-shadow-bottom';
-edgeShadowsTop.classList.add('hidden');
-edgeShadowsBottom.classList.add('hidden');
-entitiesWrapper.classList.add('entities-wrapper');
-toggleChevron.id = 'toggle-chevron';
-toggleText.innerHTML = "&nbsp;&nbsp;TEXTURES&nbsp;";
-toggleChevron.innerHTML = "&#x25B2;";
-toggle.appendChild(toggleChevron);
-toggle.appendChild(toggleText);
-toggle.appendChild(gpuFootprintText);
-edgeShadowsContainer.appendChild(edgeShadowsTop);
-edgeShadowsContainer.appendChild(edgeShadowsBottom);
-document.body.appendChild(textureMonitorContainer);
-textureMonitorContainer.appendChild(toggle);
-textureMonitorContainer.appendChild(entitiesWrapper);
-textureMonitorContainer.appendChild(edgeShadowsContainer);
-toggle.onclick = function () {
-    if (textureMonitorContainer.classList.contains('toggled')) {
-        textureMonitorContainer.classList.remove('toggled');
-    }
-    else {
-        textureMonitorContainer.classList.add('toggled');
-    }
-};
+var filterButtonsGroup = document.createElement('div');
+var modeButton = document.createElement('div');
+var typeButton = document.createElement('div');
+var modeFilter = 'all';
+var typeFilter = 'all';
 var isDown = false;
+var isToggleDown = false;
+var isDragging = false;
 var startY;
 var initialScroll;
-// Set up desktop drag to scroll
-document.addEventListener('mousedown', function (e) {
-    if (!(e.target === entitiesWrapper || entitiesWrapper.contains(e.target)))
-        return;
-    isDown = true;
-    startY = e.pageY;
-    initialScroll = entitiesWrapper.scrollTop;
-});
-document.addEventListener('mouseup', function (e) {
-    isDown = false;
-});
-document.addEventListener('mousemove', function (e) {
-    if (!isDown)
-        return;
-    entitiesWrapper.scrollTo(0, initialScroll + (startY - e.pageY));
-});
-entitiesWrapper.onscroll = function (e) {
-    e.preventDefault();
-    updateScrollShadows();
-};
+initTextureMonitor();
 HTMLCanvasElement.prototype.getContext = function (type, options) {
     var context = realFunction.call(this, type, options);
     if (type === 'webgl' || type === 'experimental-webgl') {
@@ -109,7 +69,8 @@ HTMLCanvasElement.prototype.getContext = function (type, options) {
             var glTexture = arguments[0];
             var data = textureMap.get(glTexture);
             // entitiesWrapper.removeChild(data.textureEntity);
-            data.textureEntity.classList.add('tinted');
+            data.textureEntity.classList.remove('type-active');
+            data.textureEntity.classList.add('type-deleted');
             // textureMap.delete(glTexture);
             calculateSize();
             return WebGLRenderingContext.prototype.deleteTexture.apply(this, arguments);
@@ -164,6 +125,7 @@ HTMLCanvasElement.prototype.getContext = function (type, options) {
                 data.source.classList.add('texture');
                 dimension.innerHTML = "<span>&#127924;</span>&nbsp;&nbsp;" + data.width + " X " + data.height;
                 size.innerHTML = "<span>&#128190;</span>&nbsp;" + (mbSize < 1 ? convertByteToKiloBytes(gpuMemory) + "&nbsp;KB" : mbSize + "&nbsp;MB");
+                data.textureEntity.classList.add('type-active');
                 // Setup hidden texture card hover content
                 extraInfo.appendChild(textureName);
                 if (sourceURL_1) {
@@ -176,9 +138,11 @@ HTMLCanvasElement.prototype.getContext = function (type, options) {
                         window.open(sourceURL_1, '_blank');
                     };
                     extraInfo.appendChild(textureButton);
+                    data.textureEntity.classList.add('type-texture');
                 }
                 else {
                     textureName.innerText = '???';
+                    data.textureEntity.classList.add('type-misc');
                 }
                 // if (mbSize >= 1)
                 // {
@@ -249,6 +213,156 @@ function convertByteToKiloBytes(bytes) {
     bytes /= 100;
     return bytes;
 }
+function checkIsMobile() {
+    var check = false;
+    (function (a) { if ((/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino/i).test(a) || (/1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i).test(a.substr(0, 4)))
+        check = true; })(navigator.userAgent || navigator.vendor || window.opera);
+    return check;
+}
+// ---------------------------- CSS Manipulations ----------------------------
+function initTextureMonitor() {
+    toggle.classList.add('monitor-toggle');
+    textureMonitorContainer.id = 'texture-monitor-container';
+    edgeShadowsContainer.id = 'edge-shadows-container';
+    edgeShadowsTop.id = 'edge-shadow-top';
+    edgeShadowsBottom.id = 'edge-shadow-bottom';
+    edgeShadowsTop.classList.add('hidden');
+    edgeShadowsBottom.classList.add('hidden');
+    entitiesWrapper.classList.add('entities-wrapper');
+    toggleChevron.id = 'toggle-chevron';
+    filterButtonsGroup.id = 'filter-buttons-group';
+    modeButton.id = 'mode-button';
+    modeButton.classList.add('filter-button', 'all');
+    typeButton.id = 'type-button';
+    typeButton.classList.add('filter-button', 'all');
+    toggleText.innerHTML = "&nbsp;&nbsp;TEXTURES&nbsp;";
+    toggleChevron.innerHTML = "&#x25B2;";
+    modeButton.innerHTML = "<h4>ALL</h4>";
+    typeButton.innerHTML = "<h4>ALL</h4>";
+    toggle.appendChild(toggleChevron);
+    toggle.appendChild(toggleText);
+    toggle.appendChild(gpuFootprintText);
+    edgeShadowsContainer.appendChild(edgeShadowsTop);
+    edgeShadowsContainer.appendChild(edgeShadowsBottom);
+    filterButtonsGroup.appendChild(modeButton);
+    filterButtonsGroup.appendChild(typeButton);
+    document.body.appendChild(textureMonitorContainer);
+    textureMonitorContainer.appendChild(toggle);
+    textureMonitorContainer.appendChild(entitiesWrapper);
+    textureMonitorContainer.appendChild(edgeShadowsContainer);
+    textureMonitorContainer.appendChild(filterButtonsGroup);
+    // Fix monitor panel height to maximum height on mobile devices ** Need to find ways to implement drag to scale on mobile later without causing issues **
+    if (checkIsMobile()) {
+        textureMonitorContainer.style.height = '75vh';
+    }
+    setupListeners();
+}
+function setupListeners() {
+    // Set up toggle and buttons
+    toggle.onclick = function (e) {
+        if (isDragging) {
+            isDragging = false;
+            return;
+        }
+        if (textureMonitorContainer.classList.contains('toggled')) {
+            textureMonitorContainer.classList.remove('toggled');
+        }
+        else {
+            textureMonitorContainer.classList.add('toggled');
+        }
+    };
+    modeButton.onclick = function () {
+        modeButton.classList.add('flash');
+        if (modeButton.classList.contains('all')) {
+            modeButton.classList.remove('all');
+            modeButton.classList.add('active');
+            modeButton.innerHTML = "<h2>&#9989;</h2>";
+            modeFilter = 'active';
+        }
+        else if (modeButton.classList.contains('active')) {
+            modeButton.classList.remove('active');
+            modeButton.classList.add('deleted');
+            modeButton.innerHTML = "<h2>&#10060;</h2>";
+            modeFilter = 'deleted';
+        }
+        else if (modeButton.classList.contains('deleted')) {
+            modeButton.classList.remove('deleted');
+            modeButton.classList.add('all');
+            modeButton.innerHTML = "<h4>ALL</h4>";
+            modeFilter = 'all';
+        }
+        updateList();
+    };
+    modeButton.addEventListener('transitionend', function () {
+        modeButton.classList.remove('flash');
+    });
+    typeButton.onclick = function () {
+        typeButton.classList.add('flash');
+        if (typeButton.classList.contains('all')) {
+            typeButton.classList.remove('all');
+            typeButton.classList.add('texture');
+            typeButton.innerHTML = "<h2>&#127924;</h2>";
+            typeFilter = 'texture';
+        }
+        else if (typeButton.classList.contains('texture')) {
+            typeButton.classList.remove('texture');
+            typeButton.classList.add('misc');
+            typeButton.innerHTML = "<h2>&#128291;</h2>";
+            typeFilter = 'misc';
+        }
+        else if (typeButton.classList.contains('misc')) {
+            typeButton.classList.remove('misc');
+            typeButton.classList.add('all');
+            typeButton.innerHTML = "<h4>ALL</h4>";
+            typeFilter = 'all';
+        }
+        updateList();
+    };
+    typeButton.addEventListener('transitionend', function (e) {
+        if (e.propertyName === 'background-color')
+            typeButton.classList.remove('flash');
+    });
+    // Set up desktop drag to scroll
+    document.addEventListener('mousedown', function (e) {
+        if (!(e.target === entitiesWrapper || entitiesWrapper.contains(e.target) || e.target === toggle))
+            return;
+        if (e.target === toggle)
+            isToggleDown = true;
+        else {
+            isDown = true;
+            startY = e.pageY;
+            initialScroll = entitiesWrapper.scrollTop;
+        }
+    });
+    document.addEventListener('mouseup', function (e) {
+        isDown = false;
+        isToggleDown = false;
+    });
+    document.addEventListener('mousemove', function (e) {
+        if (!isDown && !isToggleDown)
+            return;
+        if (isDown) {
+            entitiesWrapper.scrollTo(0, initialScroll + (startY - e.pageY));
+        }
+        if (isToggleDown) {
+            isDragging = true;
+            if (!textureMonitorContainer.classList.contains('toggled')) {
+                textureMonitorContainer.classList.add('toggled');
+                isDragging = false;
+            }
+            var percentHeight = ((window.innerHeight - e.clientY) / window.innerHeight) * 100;
+            if (percentHeight > 25 && percentHeight < 90) {
+                textureMonitorContainer.style.height = percentHeight + "vh";
+            }
+            else
+                isDragging = false;
+        }
+    });
+    entitiesWrapper.onscroll = function (e) {
+        e.preventDefault();
+        updateScrollShadows();
+    };
+}
 function updateScrollShadows() {
     var offset = 100;
     if (entitiesWrapper.scrollTop < offset) {
@@ -262,5 +376,39 @@ function updateScrollShadows() {
     }
     else {
         edgeShadowsBottom.classList.remove('hidden');
+    }
+}
+function updateList() {
+    var entities = document.querySelectorAll('.texture-entity');
+    // For IE Support, use call instead of direct forEach **
+    Array.prototype.forEach.call(entities, function (entity) {
+        entity.classList.add('display-none');
+    });
+    if (modeFilter === 'active') {
+        entities = document.querySelectorAll('.type-active');
+    }
+    if (modeFilter === 'deleted') {
+        entities = document.querySelectorAll('.type-deleted');
+    }
+    switch (typeFilter) {
+        case 'all':
+            Array.prototype.forEach.call(entities, function (entity) {
+                entity.classList.remove('display-none');
+            });
+            break;
+        case 'texture':
+            Array.prototype.forEach.call(entities, function (entity) {
+                if (entity.classList.contains('type-texture'))
+                    entity.classList.remove('display-none');
+            });
+            break;
+        case 'misc':
+            Array.prototype.forEach.call(entities, function (entity) {
+                if (entity.classList.contains('type-misc'))
+                    entity.classList.remove('display-none');
+            });
+            break;
+        default:
+            break;
     }
 }

@@ -14,6 +14,10 @@
   color: #d62929;
 }
 
+.display-none {
+  display: none;
+}
+
 * {
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
@@ -45,6 +49,7 @@ body {
           user-select: none;
   height: 17rem;
   padding: 1rem;
+  padding-left: 2.5rem;
 }
 
 #texture-monitor-container .monitor-toggle {
@@ -71,6 +76,12 @@ body {
   padding: 0.95rem 1.2rem;
   cursor: pointer;
   text-shadow: 0 0 0.8rem #128ab9;
+  -ms-touch-action: pan-y;
+      touch-action: pan-y;
+}
+
+#texture-monitor-container .monitor-toggle > * {
+  pointer-events: none;
 }
 
 #texture-monitor-container .monitor-toggle span {
@@ -118,6 +129,7 @@ body {
 
 #texture-monitor-container .entities-wrapper .texture-entity {
   position: relative;
+  height: 100%;
 }
 
 #texture-monitor-container .entities-wrapper .texture-entity .texture-wrapper {
@@ -163,7 +175,7 @@ body {
 #texture-monitor-container .entities-wrapper .texture-entity .extra-info {
   position: absolute;
   top: 0;
-  bottom: 0;
+  height: 13.4rem;
   left: 0;
   right: 0;
   color: #eeeeee;
@@ -233,7 +245,7 @@ body {
   content: '';
   position: absolute;
   top: 0;
-  bottom: 0;
+  height: 13.4rem;
   left: 0;
   right: 0;
   background-color: rgba(0, 0, 0, 0.7);
@@ -247,16 +259,16 @@ body {
   opacity: 1;
 }
 
-#texture-monitor-container .entities-wrapper .texture-entity.tinted {
+#texture-monitor-container .entities-wrapper .texture-entity.type-deleted {
   pointer-events: none;
 }
 
-#texture-monitor-container .entities-wrapper .texture-entity.tinted::after {
+#texture-monitor-container .entities-wrapper .texture-entity.type-deleted::after {
   background-color: #d62929;
   opacity: 0.65;
 }
 
-#texture-monitor-container .entities-wrapper .texture-entity.tinted::after .extra-info {
+#texture-monitor-container .entities-wrapper .texture-entity.type-deleted::after .extra-info {
   opacity: 0;
 }
 
@@ -282,8 +294,8 @@ body {
   position: absolute;
   top: 0;
   bottom: 0;
-  left: 1.5rem;
-  right: 2.5rem;
+  left: 3.5rem;
+  right: 3rem;
   overflow: hidden;
   pointer-events: none;
 }
@@ -324,5 +336,90 @@ body {
 
 #texture-monitor-container #edge-shadows-container #edge-shadow-bottom.hidden {
   opacity: 0;
+}
+
+#texture-monitor-container #filter-buttons-group {
+  position: absolute;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  left: 0;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+}
+
+#texture-monitor-container #filter-buttons-group .filter-button {
+  width: 3rem;
+  height: 5rem;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  border-radius: 0 0.8rem 0.8rem 0;
+  color: #eeeeee;
+  position: relative;
+  cursor: pointer;
+  -webkit-transform: translateX(-0.5rem);
+          transform: translateX(-0.5rem);
+  -webkit-transition: all 0.1s ease-out;
+  transition: all 0.1s ease-out;
+}
+
+#texture-monitor-container #filter-buttons-group .filter-button:first-child {
+  margin-bottom: 1.5rem;
+}
+
+#texture-monitor-container #filter-buttons-group .filter-button::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  border-radius: inherit;
+  background-color: black;
+  opacity: 0;
+  -webkit-transition: all 0.1s ease-out;
+  transition: all 0.1s ease-out;
+}
+
+#texture-monitor-container #filter-buttons-group .filter-button:hover {
+  -webkit-transform: translateX(0);
+          transform: translateX(0);
+}
+
+#texture-monitor-container #filter-buttons-group .filter-button:hover::after {
+  opacity: 0.15;
+}
+
+#texture-monitor-container #filter-buttons-group .filter-button.flash::after {
+  background-color: #eeeeee;
+  opacity: 0.3;
+}
+
+#texture-monitor-container #filter-buttons-group .filter-button h2, #texture-monitor-container #filter-buttons-group .filter-button h4 {
+  margin-left: 0.25rem;
+}
+
+#texture-monitor-container #filter-buttons-group #mode-button {
+  background-color: #d62929;
+  -webkit-box-shadow: 0 0.3rem 0 #801919;
+          box-shadow: 0 0.3rem 0 #801919;
+}
+
+#texture-monitor-container #filter-buttons-group #type-button {
+  background-color: #128ab9;
+  -webkit-box-shadow: 0 0.3rem 0 #09455c;
+          box-shadow: 0 0.3rem 0 #09455c;
 }
 /*# sourceMappingURL=textureMonitor.css.map */

@@ -18,6 +18,10 @@ html{
     color: $warning-red-color;
 }
 
+.display-none{
+    display: none;
+}
+
 *{
     box-sizing: border-box;
     margin: 0;
@@ -41,6 +45,7 @@ body{
     user-select: none;
     height: 17rem;
     padding: 1rem;
+    padding-left: 2.5rem;
 
     .monitor-toggle{
         position: absolute;
@@ -59,6 +64,11 @@ body{
         padding: 0.95rem 1.2rem;
         cursor: pointer;
         text-shadow: 0 0 0.8rem $blue-glow-color;
+        touch-action: pan-y;
+
+        & > *{
+            pointer-events: none;
+        }
 
         span{
             background-color: $white-color;
@@ -67,7 +77,6 @@ body{
             border-radius: 1rem;
             margin-left: 0.5rem;
             box-shadow: 0 0 0.5rem $blue-glow-color;
-
         }
 
         #toggle-chevron{
@@ -89,6 +98,7 @@ body{
         grid-template-columns: repeat(auto-fill, 9.375rem);
         height: 100%;
         width: 100%;
+        // min-height: 12rem;
         position: relative;
         justify-content: center;
         gap: 1rem;
@@ -96,6 +106,7 @@ body{
 
         .texture-entity{
             position: relative;
+            height: 100%;
 
             .texture-wrapper{
                 width: 9.375rem;
@@ -141,7 +152,7 @@ body{
             .extra-info{
                 position: absolute;
                 top:0;
-                bottom: 0;
+                height: 13.4rem;
                 left: 0;
                 right: 0;
                 color: $white-color;
@@ -195,7 +206,8 @@ body{
                 content: '';
                 position: absolute;
                 top:0;
-                bottom: 0;
+                // bottom: 0;
+                height: 13.4rem;
                 left: 0;
                 right: 0;
                 background-color: hsla(0, 0, 0, 0.7);
@@ -211,7 +223,7 @@ body{
                 }
             }
 
-            &.tinted{
+            &.type-deleted{
 
                 pointer-events: none;
 
@@ -248,8 +260,8 @@ body{
         position: absolute;
         top: 0;
         bottom: 0;
-        left: 1.5rem;
-        right: 2.5rem;
+        left: 3.5rem;
+        right: 3rem;
         overflow: hidden;
         pointer-events: none;
 
@@ -283,6 +295,76 @@ body{
             &.hidden{
                 opacity: 0;
             }
+        }
+    }
+
+    #filter-buttons-group{
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+
+        .filter-button{
+            width: 3rem;
+            height: 5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0 0.8rem 0.8rem 0;
+            color: $white-color;
+            position: relative;
+            cursor: pointer;
+            transform: translateX(-0.5rem);
+            transition: all 0.1s ease-out;
+
+            &:first-child{
+                margin-bottom: 1.5rem;
+            }
+
+            &::after{
+                content: '';
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                border-radius: inherit;
+                background-color: hsl(0, 0, 0);
+                opacity: 0;
+                transition: all 0.1s ease-out;
+            }
+
+            &:hover{
+                transform: translateX(0);
+
+                &::after{
+                    opacity: 0.15;
+                }
+            }
+
+            &.flash{
+
+                &::after{
+                    background-color: $white-color;
+                    opacity: 0.3;
+                } 
+            }
+
+            h2,h4{
+                margin-left: 0.25rem;
+            }
+        }
+
+        #mode-button{
+            background-color: $warning-red-color;
+            box-shadow: 0 0.3rem 0 darken($warning-red-color, 20%);
+        }
+
+        #type-button{
+            background-color: $blue-glow-color;
+            box-shadow: 0 0.3rem 0 darken($blue-glow-color, 20%);
         }
     }
 }
