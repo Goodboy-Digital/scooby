@@ -18,11 +18,10 @@ const toggleText = document.createElement('h3');
 const gpuFootprintText = document.createElement('h3');
 const toggleChevron = document.createElement('h3');
 const filterButtonsGroup = document.createElement('div');
-const modeButton = document.createElement('div');
-const typeButton = document.createElement('div');
-
-let modeFilter = 'all';
-let typeFilter = 'all';
+const textureButton = document.createElement('div');
+const miscButton = document.createElement('div');
+const activeButton = document.createElement('div');
+const deletedButton = document.createElement('div');
 
 let isDown = false;
 let isToggleDown = false;
@@ -90,9 +89,9 @@ HTMLCanvasElement.prototype.getContext = function(type, options){
             const glTexture = arguments[0];
             const data = textureMap.get(glTexture);
 ​
-            // entitiesWrapper.removeChild(data.textureEntity);
             data.textureEntity.classList.remove('type-active');
             data.textureEntity.classList.add('type-deleted');
+            // entitiesWrapper.removeChild(data.textureEntity);
             // textureMap.delete(glTexture);
             calculateSize();
     
@@ -299,23 +298,27 @@ function initTextureMonitor()
     entitiesWrapper.classList.add('entities-wrapper');
     toggleChevron.id = 'toggle-chevron';
     filterButtonsGroup.id = 'filter-buttons-group';
-    modeButton.id = 'mode-button';
-    modeButton.classList.add('filter-button','all');
-    typeButton.id = 'type-button';
-    typeButton.classList.add('filter-button','all');
+    textureButton.classList.add('filter-button','toggled');
+    miscButton.classList.add('filter-button','toggled');
+    activeButton.classList.add('filter-button','toggled');
+    deletedButton.classList.add('filter-button','toggled');
 
     toggleText.innerHTML = `&nbsp;&nbsp;TEXTURES&nbsp;`;
     toggleChevron.innerHTML = `&#x25B2;`;
-    modeButton.innerHTML = `<h4>ALL</h4>`;
-    typeButton.innerHTML = `<h4>ALL</h4>`;
+    textureButton.innerHTML = `<h4>&#127924;</h4>`;
+    miscButton.innerHTML = `<h4>&#128291;</h4>`;
+    activeButton.innerHTML = `<h4>&#128994;</h4>`;
+    deletedButton.innerHTML = `<h4>&#10060;</h4>`;
 
     toggle.appendChild(toggleChevron);
     toggle.appendChild(toggleText);
     toggle.appendChild(gpuFootprintText);
     edgeShadowsContainer.appendChild(edgeShadowsTop);
     edgeShadowsContainer.appendChild(edgeShadowsBottom)
-    filterButtonsGroup.appendChild(modeButton);
-    filterButtonsGroup.appendChild(typeButton);
+    filterButtonsGroup.appendChild(textureButton);
+    filterButtonsGroup.appendChild(miscButton);
+    filterButtonsGroup.appendChild(activeButton);
+    filterButtonsGroup.appendChild(deletedButton);
     document.body.appendChild(textureMonitorContainer);
     textureMonitorContainer.appendChild(toggle);
     textureMonitorContainer.appendChild(entitiesWrapper);
@@ -333,7 +336,7 @@ function initTextureMonitor()
 
 function setupListeners()
 {
-    // Set up toggle and buttons
+    // Set up toggles
     toggle.onclick = function (e)
     {
         if(isDragging){
@@ -351,71 +354,61 @@ function setupListeners()
         }
     };
 
-    modeButton.onclick = function ()
+    textureButton.onclick = function ()
     {
-        modeButton.classList.add('flash');
-
-        if(modeButton.classList.contains('all'))
+        if(textureButton.classList.contains('toggled'))
         {
-            modeButton.classList.remove('all');
-            modeButton.classList.add('active');
-            modeButton.innerHTML = `<h2>&#9989;</h2>`;
-            modeFilter = 'active';
+            textureButton.classList.remove('toggled');
         }
-        else if(modeButton.classList.contains('active'))
+        else
         {
-            modeButton.classList.remove('active');
-            modeButton.classList.add('deleted');
-            modeButton.innerHTML = `<h2>&#10060;</h2>`;
-            modeFilter = 'deleted';
-        }
-        else if(modeButton.classList.contains('deleted'))
-        {
-            modeButton.classList.remove('deleted');
-            modeButton.classList.add('all');
-            modeButton.innerHTML = `<h4>ALL</h4>`;
-            modeFilter = 'all';
+            textureButton.classList.add('toggled');
         }
 
         updateList();
     }
 
-    modeButton.addEventListener('transitionend', function() {
-        modeButton.classList.remove('flash');
-    });
-
-    typeButton.onclick = function ()
+    miscButton.onclick = function ()
     {
-        typeButton.classList.add('flash');
-
-        if(typeButton.classList.contains('all'))
+        if(miscButton.classList.contains('toggled'))
         {
-            typeButton.classList.remove('all');
-            typeButton.classList.add('texture');
-            typeButton.innerHTML = `<h2>&#127924;</h2>`;
-            typeFilter = 'texture';
+            miscButton.classList.remove('toggled');
         }
-        else if(typeButton.classList.contains('texture'))
+        else
         {
-            typeButton.classList.remove('texture');
-            typeButton.classList.add('misc');
-            typeButton.innerHTML = `<h2>&#128291;</h2>`;
-            typeFilter = 'misc';
-        }
-        else if(typeButton.classList.contains('misc'))
-        {
-            typeButton.classList.remove('misc');
-            typeButton.classList.add('all');
-            typeButton.innerHTML = `<h4>ALL</h4>`;
-            typeFilter = 'all';
+            miscButton.classList.add('toggled');
         }
 
         updateList();
     }
 
-    typeButton.addEventListener('transitionend', function(e) {
-        if(e.propertyName === 'background-color') typeButton.classList.remove('flash');
-    });
+    activeButton.onclick = function ()
+    {
+        if(activeButton.classList.contains('toggled'))
+        {
+            activeButton.classList.remove('toggled');
+        }
+        else
+        {
+            activeButton.classList.add('toggled');
+        }
+
+        updateList();
+    }
+
+    deletedButton.onclick = function ()
+    {
+        if(deletedButton.classList.contains('toggled'))
+        {
+            deletedButton.classList.remove('toggled');
+        }
+        else
+        {
+            deletedButton.classList.add('toggled');
+        }
+
+        updateList();
+    }
 
     // Set up desktop drag to scroll
     document.addEventListener('mousedown', function (e) {
@@ -450,7 +443,7 @@ function setupListeners()
 
             const percentHeight = ((window.innerHeight - e.clientY)/window.innerHeight)*100;
 
-            if(percentHeight > 25 && percentHeight < 90)
+            if(percentHeight > 30 && percentHeight < 90)
             {
                 textureMonitorContainer.style.height = `${percentHeight}vh`;
             }
@@ -491,40 +484,44 @@ function updateScrollShadows()
 
 function updateList(){
 
+    const deleted = deletedButton.classList.contains('toggled');
+    const active = activeButton.classList.contains('toggled');
     let entities = document.querySelectorAll('.texture-entity');
-    // For IE Support, use call instead of direct forEach **
     Array.prototype.forEach.call(entities, function(entity){
         entity.classList.add('display-none');
-    });
+    })
 
-    if(modeFilter === 'active')
+    if(!(deleted && active))
     {
-        entities = document.querySelectorAll('.type-active');
+        if(deleted)
+        {
+            entities = document.querySelectorAll('.type-deleted');
+        }
+
+        if(active)
+        {
+            entities = document.querySelectorAll('.type-active');
+        }
     }
 
-    if(modeFilter === 'deleted')
-    {
-        entities = document.querySelectorAll('.type-deleted');
-    }
+    // For IE Support, use call instead of direct forEach **
+    Array.prototype.forEach.call(entities, function(entity){
 
-    switch(typeFilter){
-        case 'all':
-            Array.prototype.forEach.call(entities, function(entity){
+        if(textureButton.classList.contains('toggled'))
+        {
+            if(entity.classList.contains('type-texture'))
+            {
                 entity.classList.remove('display-none');
-            });
-            break;
-        case 'texture':
-            Array.prototype.forEach.call(entities, function(entity){
-                if(entity.classList.contains('type-texture')) entity.classList.remove('display-none');
-            });
-            break;
-        case 'misc':
-            Array.prototype.forEach.call(entities, function(entity){
-                if(entity.classList.contains('type-misc')) entity.classList.remove('display-none');
-            });
-            break;
-        default:
-            break;
-    }
+            }
+        }
+
+        if(miscButton.classList.contains('toggled'))
+        {
+            if(entity.classList.contains('type-misc'))
+            {
+                entity.classList.remove('display-none');
+            }
+        }
+    });
 
 }

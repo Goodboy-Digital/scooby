@@ -152,6 +152,7 @@ body{
             .extra-info{
                 position: absolute;
                 top:0;
+                // bottom: 0;
                 height: 13.4rem;
                 left: 0;
                 right: 0;
@@ -303,24 +304,27 @@ body{
         display: flex;
         flex-direction: column;
         left: 0;
-        top: 50%;
-        transform: translateY(-50%);
+        bottom: 2.5rem;
 
         .filter-button{
             width: 3rem;
-            height: 5rem;
+            height: 2.5rem;
             display: flex;
             align-items: center;
             justify-content: center;
             border-radius: 0 0.8rem 0.8rem 0;
             color: $white-color;
+            $filter-button-color: rgb(109, 109, 109);
+            background-color: $filter-button-color;
+            box-shadow: 0 0.3rem 0 darken($filter-button-color, 20%);
             position: relative;
             cursor: pointer;
             transform: translateX(-0.5rem);
-            transition: all 0.1s ease-out;
+            transition: all 0.15s ease-out;
+            margin-bottom: 1rem;
 
-            &:first-child{
-                margin-bottom: 1.5rem;
+            &:last-child{
+                margin-bottom: 0;
             }
 
             &::after{
@@ -331,40 +335,29 @@ body{
                 left: 0;
                 right: 0;
                 border-radius: inherit;
-                background-color: hsl(0, 0, 0);
+                background-color: hsl(255, 255, 255);
                 opacity: 0;
-                transition: all 0.1s ease-out;
+                transition: all 0.15s ease-out;
             }
 
             &:hover{
                 transform: translateX(0);
 
                 &::after{
-                    opacity: 0.15;
+                    opacity: 0.10;
                 }
-            }
-
-            &.flash{
-
-                &::after{
-                    background-color: $white-color;
-                    opacity: 0.3;
-                } 
             }
 
             h2,h4{
                 margin-left: 0.25rem;
             }
-        }
 
-        #mode-button{
-            background-color: $warning-red-color;
-            box-shadow: 0 0.3rem 0 darken($warning-red-color, 20%);
-        }
-
-        #type-button{
-            background-color: $blue-glow-color;
-            box-shadow: 0 0.3rem 0 darken($blue-glow-color, 20%);
+            &.toggled{
+                $filter-button-color: $blue-glow-color;
+                background-color: $filter-button-color;
+                box-shadow: 0 0.3rem 0 darken($filter-button-color, 20%);
+            }
         }
     }
 }
+

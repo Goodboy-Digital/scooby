@@ -348,14 +348,12 @@ body {
       -ms-flex-direction: column;
           flex-direction: column;
   left: 0;
-  top: 50%;
-  -webkit-transform: translateY(-50%);
-          transform: translateY(-50%);
+  bottom: 2.5rem;
 }
 
 #texture-monitor-container #filter-buttons-group .filter-button {
   width: 3rem;
-  height: 5rem;
+  height: 2.5rem;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -367,16 +365,20 @@ body {
           justify-content: center;
   border-radius: 0 0.8rem 0.8rem 0;
   color: #eeeeee;
+  background-color: #6d6d6d;
+  -webkit-box-shadow: 0 0.3rem 0 #3a3a3a;
+          box-shadow: 0 0.3rem 0 #3a3a3a;
   position: relative;
   cursor: pointer;
   -webkit-transform: translateX(-0.5rem);
           transform: translateX(-0.5rem);
-  -webkit-transition: all 0.1s ease-out;
-  transition: all 0.1s ease-out;
+  -webkit-transition: all 0.15s ease-out;
+  transition: all 0.15s ease-out;
+  margin-bottom: 1rem;
 }
 
-#texture-monitor-container #filter-buttons-group .filter-button:first-child {
-  margin-bottom: 1.5rem;
+#texture-monitor-container #filter-buttons-group .filter-button:last-child {
+  margin-bottom: 0;
 }
 
 #texture-monitor-container #filter-buttons-group .filter-button::after {
@@ -387,10 +389,10 @@ body {
   left: 0;
   right: 0;
   border-radius: inherit;
-  background-color: black;
+  background-color: white;
   opacity: 0;
-  -webkit-transition: all 0.1s ease-out;
-  transition: all 0.1s ease-out;
+  -webkit-transition: all 0.15s ease-out;
+  transition: all 0.15s ease-out;
 }
 
 #texture-monitor-container #filter-buttons-group .filter-button:hover {
@@ -399,25 +401,14 @@ body {
 }
 
 #texture-monitor-container #filter-buttons-group .filter-button:hover::after {
-  opacity: 0.15;
-}
-
-#texture-monitor-container #filter-buttons-group .filter-button.flash::after {
-  background-color: #eeeeee;
-  opacity: 0.3;
+  opacity: 0.10;
 }
 
 #texture-monitor-container #filter-buttons-group .filter-button h2, #texture-monitor-container #filter-buttons-group .filter-button h4 {
   margin-left: 0.25rem;
 }
 
-#texture-monitor-container #filter-buttons-group #mode-button {
-  background-color: #d62929;
-  -webkit-box-shadow: 0 0.3rem 0 #801919;
-          box-shadow: 0 0.3rem 0 #801919;
-}
-
-#texture-monitor-container #filter-buttons-group #type-button {
+#texture-monitor-container #filter-buttons-group .filter-button.toggled {
   background-color: #128ab9;
   -webkit-box-shadow: 0 0.3rem 0 #09455c;
           box-shadow: 0 0.3rem 0 #09455c;
