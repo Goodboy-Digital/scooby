@@ -1,18 +1,13 @@
 $warning-red-color: rgb(214, 41, 41);
-$white-color: rgb(238, 238, 238);
-$alpha-black-color: hsla(0, 0, 0, 0.7);
-$blue-glow-color: rgb(18, 138, 185);
-
-html{
-
-    @media only screen and (max-width: 900px) {
-        font-size: 12px;
-    }
-
-    @media only screen and (max-width: 640px) {
-        font-size: 10px;
-    }
-}
+$white-color: rgb(255, 255, 255);
+$background-color: rgba(37, 44, 57, 1);
+$secondary-color: rgb(92, 107, 192);
+$primary-color:$secondary-color;// rgba(63, 81, 181, 1);
+$scroll-primary-color: rgb(92, 107, 192);
+$scroll-secondary-color: rgb(255, 255, 255);
+$filter-button-normal-color: $secondary-color;// rgb(63, 81, 181);
+$filter-button-active-color: rgb(0, 150, 136);
+$filter-button-deleted-color: rgb(233, 30, 99);
 
 .warning-color{
     color: $warning-red-color;
@@ -34,7 +29,7 @@ body{
 
 #texture-monitor-container{
     font-family: Arial, Helvetica, sans-serif;
-    background-color: $alpha-black-color;
+    background-color: $background-color;
     position: absolute;
     z-index: 1000;
     left: 0;
@@ -43,7 +38,7 @@ body{
     transform: translateY(100%);
     transition: transform 0.25s ease-in-out;
     user-select: none;
-    height: 17rem;
+    height: 12.6rem;
     padding: 1rem;
     padding-left: 2.5rem;
 
@@ -53,17 +48,17 @@ body{
         left: 1.5rem;
         top: 0.0625rem;
         transform: translateY(-100%);
-        height: 3.2rem;
-        background-color: $alpha-black-color;
-        border-radius: 0.5rem 0.5rem 0 0;
+        height: 2rem;
+        background-color: $primary-color;
+        border-radius: 0.2rem 0.2rem 0 0;
         box-shadow: 0 -0.125rem 0.4375rem hsla(0, 0, 0, 0.3);
         color: $white-color;
         display: flex;
         justify-content: center;
         align-content: center;
-        padding: 0.95rem 1.2rem;
+        padding: 0.5rem 0.75rem;
         cursor: pointer;
-        text-shadow: 0 0 0.8rem $blue-glow-color;
+        text-shadow: 0 0 0.8rem $primary-color;
         touch-action: pan-y;
 
         & > *{
@@ -71,12 +66,12 @@ body{
         }
 
         span{
-            background-color: $white-color;
+            background-color: $primary-color;
             text-shadow: none;
-            padding: 0.25rem 0.8rem;
-            border-radius: 1rem;
+            padding: 0.0rem 0.8rem;
+            border-radius: 0.1rem;
             margin-left: 0.5rem;
-            box-shadow: 0 0 0.5rem $blue-glow-color;
+            box-shadow: 0 0 0.5rem $primary-color;
         }
 
         #toggle-chevron{
@@ -98,7 +93,6 @@ body{
         grid-template-columns: repeat(auto-fill, 9.375rem);
         height: 100%;
         width: 100%;
-        // min-height: 12rem;
         position: relative;
         justify-content: center;
         gap: 1rem;
@@ -110,14 +104,13 @@ body{
 
             .texture-wrapper{
                 width: 9.375rem;
-                height: 9.375rem;
-                border: 0.0625rem solid $warning-red-color;
+                height: 6.375rem;
                 position: relative;
                 background-image: linear-gradient(45deg, #c7c7c7 25%, transparent 25%), linear-gradient(-45deg, #c7c7c7 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #c7c7c7 75%), linear-gradient(-45deg, transparent 75%, #c7c7c7 75%);
                 background-size: 1.875rem 1.875rem;
                 background-position: 0 0, 0 0.9375rem, 0.9375rem -0.9375rem, -0.9375rem 0;
                 background-color: #777777;
-                border-radius: 0.3rem 0.3rem 0 0;
+                border-radius: 0.1rem 0.1rem 0 0;
 
                 .texture{
                     position: absolute;
@@ -131,20 +124,21 @@ body{
             }
 
             .texture-info{
-                background-color: rgb(58, 93, 105);
-                padding: 0.5rem 0;
+                background-color: rgb(66, 80, 101);
+                padding: 0.2rem 0;
                 padding-left: 0.6rem;;
                 color: $white-color;
-                border-radius: 0 0 0.3rem 0.3rem;
+                border-radius: 0 0 0.1rem 0.1rem;
                 width: 100%;
 
                 h4{
                     margin-bottom: 0.2rem;
+                    font-size: medium;
                 }
 
                 h3{
                     span{
-                        font-size: 1.1rem;
+                        font-size: medium;
                     }
                 }
             }
@@ -152,8 +146,7 @@ body{
             .extra-info{
                 position: absolute;
                 top:0;
-                // bottom: 0;
-                height: 13.4rem;
+                height: 10.4rem;
                 left: 0;
                 right: 0;
                 color: $white-color;
@@ -167,16 +160,17 @@ body{
                 text-align: center;
 
                 h3{
-                    max-width: 7rem;
+                    font-size: medium;
+                    max-width: 9rem;
                     word-wrap: break-word;
                 }
 
                 div{
                     position: relative;
-                    background-color: $blue-glow-color;
+                    background-color: $primary-color;
                     padding: 0.5rem 1.5rem;
                     margin-top: 1rem;
-                    border-radius: 1rem;
+                    border-radius: 0.1rem;
                     transition: transform 0.1s ease-out;
                     cursor: pointer;
 
@@ -207,12 +201,11 @@ body{
                 content: '';
                 position: absolute;
                 top:0;
-                // bottom: 0;
-                height: 13.4rem;
+                height: 9.8rem;
                 left: 0;
                 right: 0;
-                background-color: hsla(0, 0, 0, 0.7);
-                border-radius: 0.3rem;
+                background-color: hsla(0, 0, 0, 0.8);
+                border-radius: 0.1rem;
                 opacity: 0;
                 transition: opacity 0.1s ease-out;
             }
@@ -241,8 +234,8 @@ body{
 
         &::-webkit-scrollbar-track{
             box-shadow: inset 0 0 0.375rem rgba(0,0,0,0.3);
-            border-radius: 1rem;
-            background-color: $white-color;
+            border-radius: 0.2rem;
+            background-color: $scroll-secondary-color;
         }
 
         &::-webkit-scrollbar{
@@ -250,52 +243,9 @@ body{
         }
 
         &::-webkit-scrollbar-thumb{
-            border-radius: 1rem;
+            border-radius: 0.2rem;
             box-shadow: inset 0 0 0.375rem rgba(0,0,0,.3);
-            background-color: $warning-red-color;
-        }
-
-    }
-
-    #edge-shadows-container{
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 3.5rem;
-        right: 3rem;
-        overflow: hidden;
-        pointer-events: none;
-
-        #edge-shadow-top{
-            position: absolute;
-            top: 1rem;
-            left: 0;
-            right: 0;
-            box-shadow: 0.3rem 2.2rem 1.2rem -1.5rem hsla(0, 0, 0, 0.8);
-            height: 100px;
-            transform: translateY(-100%);
-            transition: opacity 0.2s ease-out;
-            opacity: 0.7;
-
-            &.hidden{
-                opacity: 0;
-            }
-        }
-
-        #edge-shadow-bottom{
-            position: absolute;
-            bottom: 1rem;
-            left: 0;
-            right: 0;
-            box-shadow: 0.3rem -2.2rem 1.2rem -1.5rem hsla(0, 0, 0, 0.8);
-            height: 100px;
-            transform: translateY(100%);
-            transition: opacity 0.2s ease-out;
-            opacity: 0.7;
-
-            &.hidden{
-                opacity: 0;
-            }
+            background-color: $scroll-primary-color;
         }
     }
 
@@ -304,15 +254,15 @@ body{
         display: flex;
         flex-direction: column;
         left: 0;
-        bottom: 2.5rem;
+        bottom: 2rem;
 
         .filter-button{
-            width: 3rem;
-            height: 2.5rem;
+            width: 5rem;
+            height: 1.5rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 0 0.8rem 0.8rem 0;
+            border-radius: 0 0.2rem 0.2rem 0;
             color: $white-color;
             $filter-button-color: rgb(109, 109, 109);
             background-color: $filter-button-color;
@@ -321,7 +271,8 @@ body{
             cursor: pointer;
             transform: translateX(-0.5rem);
             transition: all 0.15s ease-out;
-            margin-bottom: 1rem;
+            margin-bottom: 0.75rem;
+            font-size: small;
 
             &:last-child{
                 margin-bottom: 0;
@@ -352,12 +303,32 @@ body{
                 margin-left: 0.25rem;
             }
 
-            &.toggled{
-                $filter-button-color: $blue-glow-color;
-                background-color: $filter-button-color;
-                box-shadow: 0 0.3rem 0 darken($filter-button-color, 20%);
+            &.active{
+                $filter-button-color: $filter-button-active-color;
+                &.toggled{
+                    background-color: $filter-button-color;
+                    box-shadow: 0 0.3rem 0 darken($filter-button-color, 10%);
+                }
+            }
+            &.deleted{
+                $filter-button-color: $filter-button-deleted-color;
+                &.toggled{
+                    background-color: $filter-button-color;
+                    box-shadow: 0 0.3rem 0 darken($filter-button-color, 15%);
+                }
+            }
+            &.normal{
+                $filter-button-color: $filter-button-normal-color;
+                &.toggled{
+                    background-color: $filter-button-color;
+                    box-shadow: 0 0.3rem 0 darken($filter-button-color, 15%);
+                }
             }
         }
+    }
+
+    h3{
+        font-size: medium;
     }
 }
 

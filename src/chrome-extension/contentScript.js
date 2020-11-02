@@ -59,17 +59,9 @@ if (sessionStorage.getItem(isLoadedKey) === 'true')
 
     insertHeaderNode(link);
 
-    // const s = document.createElement('script');
+    const mainScript = `{{SCRIPT}}`;
 
-    // s.src = chrome.extension.getURL('TextureMonitor.js');
-    // s.async = false;
-    // insertHeaderNode(s);
-
-    // // sendMessage({ script: 1 });
-
-    const a = `{{SCRIPT}}`;
-
-    insertTextScript(a);
+    insertTextScript(mainScript);
 }
 else
 {
@@ -95,7 +87,6 @@ document.addEventListener('DOMContentLoaded', function ()
 listenForMessage(function (message)
 {
     const action = message.action;
-    // Only answer to actions.
 
     if (!action)
     {
