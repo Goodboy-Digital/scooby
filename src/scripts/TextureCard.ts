@@ -27,7 +27,7 @@ export class TextureCard
         data.source?.classList?.add('texture');
 
         this.dimension.innerHTML = `<span>&#127924;</span>&nbsp;&nbsp;${data.width} X ${data.height}`;
-        this.size.innerHTML = `<span>&#128190;</span>&nbsp;${mbSize}`;
+        this.size.innerHTML = `<span>&#128190;</span>&nbsp;&nbsp;${mbSize}`;
 
         data.cardHolder.classList.add('type-active');
 
