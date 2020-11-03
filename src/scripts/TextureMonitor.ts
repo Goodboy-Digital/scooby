@@ -116,6 +116,7 @@ export class TextureMonitor
         this._container.appendChild(this._cardWrapper);
         this._container.appendChild(this._toggleButtonGroup.div);
 
+        this._initCreateImageBitmap();
         this._setupListeners();
 
         this._initialized = true;
@@ -216,8 +217,27 @@ export class TextureMonitor
 
         this._toggleButtonGroup.setupListeners();
         this._toggleButtonGroup.updateList.connect(() => this._updateList());
+        this._toggleButtonGroup.updateCreateImageBitmap.connect(() => this._updateCreateImageBitmap());
 
         convertToScrollContainer(this._cardWrapper);
+    }
+
+    public _initCreateImageBitmap(): void
+    {
+        (window as any).defaultCreateImageBitmap = window.createImageBitmap;
+        this._updateCreateImageBitmap();
+    }
+
+    public _updateCreateImageBitmap(): void
+    {
+        if (window.createImageBitmap)
+        {
+            window.createImageBitmap = null;
+        }
+        else
+        {
+            window.createImageBitmap = (window as any).defaultCreateImageBitmap;
+        }
     }
 
     private _firstList(): void

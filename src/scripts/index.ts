@@ -5,8 +5,6 @@ import './styles/index.scss';
 
 import { TextureMonitor } from './TextureMonitor';
 
-// TODO: add toggle button for killing createImageBitmap()
-window.createImageBitmap = null;
 const textureMonitor = new TextureMonitor();
 
 const __Origin_EXTENSION_GetContext = HTMLCanvasElement.prototype.getContext;

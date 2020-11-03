@@ -5,6 +5,7 @@ export enum ToggleType
     ACTIVE='active',
     DELETED='deleted',
     NORMAL='normal',
+    KILL='kill',
 }
 
 export interface ToggleButtonData
