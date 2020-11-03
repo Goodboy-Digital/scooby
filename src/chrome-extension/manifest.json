@@ -1,0 +1,27 @@
+{
+    "manifest_version": 2,
+    "name": "WebGL Texture Monitor",
+    "version": "1.0.0",
+    "description": "WebGL GUI texture monitoring tool for web content",
+    "author":"Goodboy Digital",
+    "permissions": ["tabs", "storage", "http://*/*", "https://*/*"],
+    "page_action": {
+        "default_icon": "icons/icon-off.png",
+        "default_title": "Inspect with TextureMonitor"
+    },
+    "background": {
+        "scripts": ["background.js"],
+        "persistent": true
+    },
+    "content_scripts": [{
+        "matches": [
+            "file://*/*",
+            "http://*/*",
+            "https://*/*"
+        ],
+        "all_frames" : true,
+        "run_at": "document_start",
+        "js": ["contentScript.js"]
+    }],
+    "web_accessible_resources": ["TextureMonitor.js","TextureMonitor.css"]
+}

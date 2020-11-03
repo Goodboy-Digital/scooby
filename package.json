@@ -1,0 +1,38 @@
+{
+  "name": "@goodboydigital/webgl-texture-monitor",
+  "version": "1.0.0",
+  "description": "WebGL GUI texture monitoring tool for web content",
+  "main": "dist/index.js",
+  "scripts": {
+    "clean": "rimraf dist temp",
+    "start": "rollup -cw",
+    "lint": "npx eslint --ext .js --ext .ts src --ignore-path .gitignore --max-warnings 0",
+    "lint:fix": "npm run lint -- --fix",
+    "build": "rollup -c && node tools/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Goodboy-Digital/webgl-texture-monitor.git"
+  },
+  "author": "Goodboy Digital",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Goodboy-Digital/webgl-texture-monitor/issues"
+  },
+  "homepage": "https://github.com/Goodboy-Digital/webgl-texture-monitor#readme",
+  "devDependencies": {
+    "@goodboydigital/eslint-config": "^1.7.3",
+    "@rollup/plugin-commonjs": "^16.0.0",
+    "@rollup/plugin-node-resolve": "^10.0.0",
+    "eslint": "^7.12.1",
+    "rimraf": "3.0.2",
+    "rollup": "^2.33.1",
+    "rollup-plugin-copy": "^3.3.0",
+    "rollup-plugin-scss": "^2.6.1",
+    "rollup-plugin-typescript2": "^0.29.0",
+    "typescript": "^4.0.5"
+  },
+  "dependencies": {
+    "typed-signals": "^2.1.0"
+  }
+}
