@@ -6,6 +6,7 @@ $primary-color:$secondary-color;// rgba(63, 81, 181, 1);
 $scroll-primary-color: rgb(92, 107, 192);
 $scroll-secondary-color: rgb(255, 255, 255);
 $filter-button-normal-color: $secondary-color;// rgb(63, 81, 181);
+$filter-button-kill-color: rgb(230, 196, 46);
 $filter-button-active-color: rgb(0, 150, 136);
 $filter-button-deleted-color: rgb(233, 30, 99);
 
@@ -253,7 +254,7 @@ $filter-button-deleted-color: rgb(233, 30, 99);
         display: flex;
         flex-direction: column;
         left: 0;
-        bottom: 2em;
+        bottom: 1.1em;
 
         // Hacky - Using px here instead to avoid em chained calculations
         .filter-button{
@@ -319,6 +320,13 @@ $filter-button-deleted-color: rgb(233, 30, 99);
             }
             &.normal{
                 $filter-button-color: $filter-button-normal-color;
+                &.toggled{
+                    background-color: $filter-button-color;
+                    box-shadow: 0 4.8px 0 darken($filter-button-color, 15%);
+                }
+            }
+            &.kill{
+                $filter-button-color: $filter-button-kill-color;
                 &.toggled{
                     background-color: $filter-button-color;
                     box-shadow: 0 4.8px 0 darken($filter-button-color, 15%);
