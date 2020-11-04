@@ -91,6 +91,16 @@ export class TextureMonitor
         return null;
     }
 
+    public static overrideCreateImageBitmap(): void
+    {
+        (window as any).defaultCreateImageBitmap = window.createImageBitmap;
+
+        if (sessionStorage.getItem('REMOVE_CIB') === 'true')
+        {
+            window.createImageBitmap = null;
+        }
+    }
+
     public init(): void
     {
         this._toggle = document.createElement('div');
@@ -116,7 +126,11 @@ export class TextureMonitor
         this._container.appendChild(this._cardWrapper);
         this._container.appendChild(this._optionsPanel.div);
 
-        this._initCreateImageBitmap();
+        if (sessionStorage.getItem('REMOVE_CIB') === 'true' || sessionStorage.getItem('REMOVE_CIB') === null)
+        {
+            this._toggleButtonGroup.bitmapButton.div.classList.remove('toggled');
+        }
+
         this._setupListeners();
 
         this._initialized = true;
@@ -242,13 +256,15 @@ export class TextureMonitor
 
     public _updateCreateImageBitmap(): void
     {
-        if (window.createImageBitmap)
+        if (sessionStorage.getItem('REMOVE_CIB') === 'false')
         {
             window.createImageBitmap = null;
+            sessionStorage.setItem('REMOVE_CIB', 'true');
         }
         else
         {
             window.createImageBitmap = (window as any).defaultCreateImageBitmap;
+            sessionStorage.setItem('REMOVE_CIB', 'false');
         }
     }
 
