@@ -21,9 +21,9 @@ export class ToggleButtonGroup
 
         this.textureButton.init(this.div);
         this.miscButton.init(this.div);
-        this.bitmapButton.init(this.div);
         this.activeButton.init(this.div);
         this.deletedButton.init(this.div);
+        this.bitmapButton.init(this.div);
     }
 
     public setupListeners(): void

@@ -5,6 +5,7 @@ import './styles/index.scss';
 
 import { TextureMonitor } from './TextureMonitor';
 
+TextureMonitor.overrideCreateImageBitmap();
 const textureMonitor = new TextureMonitor();
 
 const __Origin_EXTENSION_GetContext = HTMLCanvasElement.prototype.getContext;

@@ -12,7 +12,8 @@
     "prebuild": "npm run clean",
     "build": "npm run build:npm && npm run build:chrome",
     "build:npm": "rollup -c",
-    "build:chrome": "rollup -c rollup.config.chrome.js && node tools/index.js && rimraf temp"
+    "build:chrome": "rollup -c rollup.config.chrome.js && node tools/index.js && rimraf temp",
+    "watch:npm": "rollup -c -w"
   },
   "repository": {
     "type": "git",
