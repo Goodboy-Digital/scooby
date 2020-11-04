@@ -1,6 +1,6 @@
 import { TextureCard } from './TextureCard';
-import { ToggleButton } from './toggles/ToggleButton';
-import { ToggleButtonGroup } from './toggles/ToggleButtonGroup';
+import { OptionsPanel } from './toggles/OptionsPanel';
+import { ToggleAction, ToggleButton } from './toggles/ToggleButton';
 import { attachToDocument } from './utils/attachToDocument';
 import { calculateSize } from './utils/calculateFileSize';
 import { calculateTextureSize } from './utils/calculateTextureSize';
@@ -34,7 +34,7 @@ export class TextureMonitor
     private _cardWrapper: HTMLDivElement;
     private _memorySizeText: HTMLHeadingElement;
     private _toggleArrow: HTMLHeadingElement;
-    private _toggleButtonGroup: ToggleButtonGroup;
+    private _optionsPanel: OptionsPanel;
     private _initialized = false;
     private _toAdd: Array<HTMLDivElement> = [];
 
@@ -98,9 +98,9 @@ export class TextureMonitor
         this._cardWrapper = document.createElement('div');
         this._memorySizeText = document.createElement('h3');
         this._toggleArrow = document.createElement('h3');
-        this._toggleButtonGroup = new ToggleButtonGroup();
+        this._optionsPanel = new OptionsPanel();
 
-        this._toggleButtonGroup.init();
+        this._optionsPanel.init();
         this._toggle.classList.add('monitor-toggle');
         this._container.id = 'texture-monitor-container';
         this._cardWrapper.classList.add('entities-wrapper');
@@ -114,7 +114,7 @@ export class TextureMonitor
 
         this._container.appendChild(this._toggle);
         this._container.appendChild(this._cardWrapper);
-        this._container.appendChild(this._toggleButtonGroup.div);
+        this._container.appendChild(this._optionsPanel.div);
 
         this._initCreateImageBitmap();
         this._setupListeners();
@@ -215,11 +215,23 @@ export class TextureMonitor
             }
         };
 
-        this._toggleButtonGroup.setupListeners();
-        this._toggleButtonGroup.updateList.connect(() => this._updateList());
-        this._toggleButtonGroup.updateCreateImageBitmap.connect(() => this._updateCreateImageBitmap());
+        this._optionsPanel.setupListeners();
+        this._optionsPanel.onToggled.connect((action) => this._handleToggles(action));
 
         convertToScrollContainer(this._cardWrapper);
+    }
+
+    public _handleToggles(action: ToggleAction): void
+    {
+        if (action === ToggleAction.UPDATE_LIST)
+        {
+            this._updateList();
+        }
+
+        if (action === ToggleAction.TOGGLE_KILL_CREATE_IMAGE_BITMAP)
+        {
+            this._updateCreateImageBitmap();
+        }
     }
 
     public _initCreateImageBitmap(): void
@@ -254,8 +266,8 @@ export class TextureMonitor
 
     private _updateList(): void
     {
-        const deleted = this._toggleButtonGroup.deletedButton.contains('toggled');
-        const active = this._toggleButtonGroup.activeButton.contains('toggled');
+        const deleted = this._optionsPanel.statusGroup.buttons.deleted.contains('toggled');
+        const active = this._optionsPanel.statusGroup.buttons.active.contains('toggled');
         let entities = document.querySelectorAll('.texture-entity');
 
         entities.forEach((entity: Element) =>
@@ -289,8 +301,8 @@ export class TextureMonitor
                 }
             };
 
-            cb(this._toggleButtonGroup.textureButton, entity, 'type-texture');
-            cb(this._toggleButtonGroup.miscButton, entity, 'type-misc');
+            cb(this._optionsPanel.typeGroup.buttons.texture, entity, 'type-texture');
+            cb(this._optionsPanel.typeGroup.buttons.misc, entity, 'type-misc');
         });
     }
 }

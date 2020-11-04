@@ -1,17 +1,24 @@
 import { Signal } from 'typed-signals';
 
 export enum ToggleType
-    {
+{
     ACTIVE='active',
     DELETED='deleted',
     NORMAL='normal',
     KILL='kill',
 }
 
+export enum ToggleAction
+{
+    UPDATE_LIST,
+    TOGGLE_KILL_CREATE_IMAGE_BITMAP
+}
+
 export interface ToggleButtonData
 {
     type: ToggleType,
     text: string,
+    action?: ToggleAction,
 }
 
 export class ToggleButton
@@ -19,13 +26,15 @@ export class ToggleButton
     div: HTMLDivElement;
     type: ToggleType;
     text: string;
+    action: ToggleAction
 
-    updateList = new Signal();
+    onToggled = new Signal();
 
     constructor(data: ToggleButtonData)
     {
         this.type = data.type;
         this.text = data.text;
+        this.action = data.action || ToggleAction.UPDATE_LIST;
     }
 
     init(parent: HTMLDivElement): void
@@ -51,7 +60,7 @@ export class ToggleButton
                 this.div.classList.add('toggled');
             }
 
-            this.updateList.emit();
+            this.onToggled.emit(this.action);
         };
     }
 

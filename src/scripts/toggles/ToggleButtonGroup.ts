@@ -1,46 +1,47 @@
 import { Signal } from 'typed-signals';
+import { ToggleButton, ToggleButtonData } from './ToggleButton';
 
-import { ToggleButton, ToggleType } from './ToggleButton';
+export interface ToggleButtonGroupData
+{
+    text: string,
+    buttonsData: Record<string, ToggleButtonData>,
+}
 
 export class ToggleButtonGroup
 {
     div: HTMLDivElement;
-    textureButton = new ToggleButton({ type: ToggleType.NORMAL, text: 'Textures' });
-    miscButton = new ToggleButton({ type: ToggleType.NORMAL, text: 'Misc' });
-    bitmapButton = new ToggleButton({ type: ToggleType.KILL, text: 'Kill CIB' });
-    activeButton = new ToggleButton({ type: ToggleType.ACTIVE, text: 'Active' });
-    deletedButton = new ToggleButton({ type: ToggleType.DELETED, text: 'Deleted' });
+    text: string;
+    buttons: Record<string, ToggleButton>;
 
-    updateList = new Signal();
-    updateCreateImageBitmap = new Signal();
+    onToggled = new Signal();
 
-    init(): void
+    constructor(data: ToggleButtonGroupData)
+    {
+        this.text = data.text;
+        this.buttons = {};
+
+        for (const key in data.buttonsData)
+        {
+            this.buttons[key] = new ToggleButton(data.buttonsData[key]);
+        }
+    }
+
+    init(parent: HTMLDivElement): void
     {
         this.div = document.createElement('div');
         this.div.id = 'filter-buttons-group';
+        this.div.innerHTML = `<h4>${this.text}:</h4>`;
 
-        this.textureButton.init(this.div);
-        this.miscButton.init(this.div);
-        this.bitmapButton.init(this.div);
-        this.activeButton.init(this.div);
-        this.deletedButton.init(this.div);
+        Object.values(this.buttons).forEach((button) => button.init(this.div));
+        parent.appendChild(this.div);
     }
 
     public setupListeners(): void
     {
-        this.textureButton.setupListeners();
-        this.textureButton.updateList.connect(() => this.updateList.emit());
-
-        this.miscButton.setupListeners();
-        this.miscButton.updateList.connect(() => this.updateList.emit());
-
-        this.bitmapButton.setupListeners();
-        this.bitmapButton.updateList.connect(() => this.updateCreateImageBitmap.emit());
-
-        this.activeButton.setupListeners();
-        this.activeButton.updateList.connect(() => this.updateList.emit());
-
-        this.deletedButton.setupListeners();
-        this.deletedButton.updateList.connect(() => this.updateList.emit());
+        Object.values(this.buttons).forEach((button) => 
+        {
+            button.setupListeners();
+            button.onToggled.connect((action) => this.onToggled.emit(action));
+        });
     }
 }

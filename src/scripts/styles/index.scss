@@ -249,87 +249,90 @@ $filter-button-deleted-color: rgb(233, 30, 99);
         }
     }
 
-    #filter-buttons-group{
-        position: absolute;
-        display: flex;
-        flex-direction: column;
-        left: 0;
-        bottom: 1.1em;
+    #options-panel{
 
-        // Hacky - Using px here instead to avoid em chained calculations
-        .filter-button{
-            width: 80px;
-            height: 24px;
+        #filter-buttons-group{
+            position: absolute;
             display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 0 3.2px 3.2px 0;
-            color: $white-color;
-            $filter-button-color: rgb(109, 109, 109);
-            background-color: $filter-button-color;
-            box-shadow: 0 4.8px 0 darken($filter-button-color, 20%);
-            position: relative;
-            cursor: pointer;
-            transform: translateX(-8px);
-            transition: all 0.15s ease-out;
-            margin-bottom: 12px;
-            font-size: small;
-
-            &:last-child{
-                margin-bottom: 0;
-            }
-
-            &::after{
-                content: '';
-                position: absolute;
-                top: 0;
-                bottom: 0;
-                left: 0;
-                right: 0;
-                border-radius: inherit;
-                background-color: hsl(255, 255, 255);
-                opacity: 0;
+            flex-direction: column;
+            left: 0;
+            bottom: 1.1em;
+    
+            // Hacky - Using px here instead to avoid em chained calculations
+            .filter-button{
+                width: 80px;
+                height: 24px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 0 3.2px 3.2px 0;
+                color: $white-color;
+                $filter-button-color: rgb(109, 109, 109);
+                background-color: $filter-button-color;
+                box-shadow: 0 4.8px 0 darken($filter-button-color, 20%);
+                position: relative;
+                cursor: pointer;
+                transform: translateX(-8px);
                 transition: all 0.15s ease-out;
-            }
-
-            &:hover{
-                transform: translateX(0);
-
+                margin-bottom: 12px;
+                font-size: small;
+    
+                &:last-child{
+                    margin-bottom: 0;
+                }
+    
                 &::after{
-                    opacity: 0.10;
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    bottom: 0;
+                    left: 0;
+                    right: 0;
+                    border-radius: inherit;
+                    background-color: hsl(255, 255, 255);
+                    opacity: 0;
+                    transition: all 0.15s ease-out;
                 }
-            }
-
-            h2,h4{
-                margin-left: 4px;
-            }
-
-            &.active{
-                $filter-button-color: $filter-button-active-color;
-                &.toggled{
-                    background-color: $filter-button-color;
-                    box-shadow: 0 4.8px 0 darken($filter-button-color, 10%);
+    
+                &:hover{
+                    transform: translateX(0);
+    
+                    &::after{
+                        opacity: 0.10;
+                    }
                 }
-            }
-            &.deleted{
-                $filter-button-color: $filter-button-deleted-color;
-                &.toggled{
-                    background-color: $filter-button-color;
-                    box-shadow: 0 4.8px 0 darken($filter-button-color, 15%);
+    
+                h2,h4{
+                    margin-left: 4px;
                 }
-            }
-            &.normal{
-                $filter-button-color: $filter-button-normal-color;
-                &.toggled{
-                    background-color: $filter-button-color;
-                    box-shadow: 0 4.8px 0 darken($filter-button-color, 15%);
+    
+                &.active{
+                    $filter-button-color: $filter-button-active-color;
+                    &.toggled{
+                        background-color: $filter-button-color;
+                        box-shadow: 0 4.8px 0 darken($filter-button-color, 10%);
+                    }
                 }
-            }
-            &.kill{
-                $filter-button-color: $filter-button-kill-color;
-                &.toggled{
-                    background-color: $filter-button-color;
-                    box-shadow: 0 4.8px 0 darken($filter-button-color, 15%);
+                &.deleted{
+                    $filter-button-color: $filter-button-deleted-color;
+                    &.toggled{
+                        background-color: $filter-button-color;
+                        box-shadow: 0 4.8px 0 darken($filter-button-color, 15%);
+                    }
+                }
+                &.normal{
+                    $filter-button-color: $filter-button-normal-color;
+                    &.toggled{
+                        background-color: $filter-button-color;
+                        box-shadow: 0 4.8px 0 darken($filter-button-color, 15%);
+                    }
+                }
+                &.kill{
+                    $filter-button-color: $filter-button-kill-color;
+                    &.toggled{
+                        background-color: $filter-button-color;
+                        box-shadow: 0 4.8px 0 darken($filter-button-color, 15%);
+                    }
                 }
             }
         }
