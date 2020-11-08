@@ -128,7 +128,7 @@ export class TextureMonitor
 
         if (sessionStorage.getItem('REMOVE_CIB') === 'true' || sessionStorage.getItem('REMOVE_CIB') === null)
         {
-            this._toggleButtonGroup.bitmapButton.div.classList.remove('toggled');
+            this._optionsPanel.miscGroup.buttons.bitmap.div.classList.remove('toggled');
         }
 
         this._setupListeners();
