@@ -7,6 +7,7 @@ $scroll-primary-color: rgb(92, 107, 192);
 $scroll-secondary-color: rgb(255, 255, 255);
 $filter-button-normal-color: $secondary-color;// rgb(63, 81, 181);
 $filter-button-kill-color: rgb(230, 196, 46);
+$filter-button-logs-color: rgb(33, 150, 243);
 $filter-button-active-color: rgb(0, 150, 136);
 $filter-button-deleted-color: rgb(233, 30, 99);
 
@@ -248,6 +249,60 @@ $filter-button-deleted-color: rgb(233, 30, 99);
         }
     }
 
+    #logs-wrapper{
+        overflow-y: auto;
+        height: 100%;
+        display: block;
+        padding: 0.5em 0.5em 0 0.5em;
+        position: relative;
+        overscroll-behavior: contain;
+        background-color: darken($background-color, 15%);
+        color: $white-color;
+
+        #clear-button{
+            position: fixed;
+            bottom: 0;
+            right: 3.5rem;
+            border-radius: 0.5em 0.5em 0 0;
+            color: $white-color;
+            $filter-button-color: rgb(109, 109, 109);
+            background-color: $filter-button-color;
+            padding: 0.5em 0.8em 1em 0.8em;
+            cursor: pointer;
+            transform: translateY(0.5em);
+            transition: all 0.15s ease-out;
+            font-size: small;
+            opacity: 1;
+
+            &::after{
+                content: '';
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                border-radius: inherit;
+                background-color: hsl(255, 255, 255);
+                opacity: 0;
+                transition: all 0.15s ease-out;
+            }
+
+            &:hover{
+                transform: translateY(0);
+                &::after{
+                    opacity: 0.10;
+                }
+            }
+
+            &:active{
+                transform: translateY(0.1em);
+                &::after{
+                    opacity: 0.05;
+                }
+            }
+        }
+    }
+
     #options-panel{
         position: absolute;
         top: 1px;
@@ -382,6 +437,20 @@ $filter-button-deleted-color: rgb(233, 30, 99);
                 }
                 &.kill{
                     $filter-button-color: $filter-button-kill-color;
+                    &.toggled{
+                        background-color: $filter-button-color;
+                        transform: translateY(-8px);
+                        &::before{
+                            background-color: $filter-button-color;
+                            bottom: -8px;
+                        }
+                        &::after{
+                            bottom: -8px;
+                        }
+                    }
+                }
+                &.logs{
+                    $filter-button-color: $filter-button-logs-color;
                     &.toggled{
                         background-color: $filter-button-color;
                         transform: translateY(-8px);

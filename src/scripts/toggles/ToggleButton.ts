@@ -6,12 +6,14 @@ export enum ToggleType
     DELETED='deleted',
     NORMAL='normal',
     KILL='kill',
+    LOGS='logs',
 }
 
 export enum ToggleAction
 {
     UPDATE_LIST,
-    TOGGLE_KILL_CREATE_IMAGE_BITMAP
+    TOGGLE_KILL_CREATE_IMAGE_BITMAP,
+    TOGGLE_LOGS,
 }
 
 export interface ToggleButtonData

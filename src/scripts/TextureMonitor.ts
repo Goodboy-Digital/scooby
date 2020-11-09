@@ -1,3 +1,4 @@
+import { LogsPanel } from './LogsPanel';
 import { TextureCard } from './TextureCard';
 import { OptionsPanel } from './toggles/OptionsPanel';
 import { ToggleAction, ToggleButton } from './toggles/ToggleButton';
@@ -35,6 +36,7 @@ export class TextureMonitor
     private _cardWrapper: HTMLDivElement;
     private _memorySizeText: HTMLHeadingElement;
     private _toggleArrow: HTMLHeadingElement;
+    private _logsPanel: LogsPanel;
     private _optionsPanel: OptionsPanel;
     private _initialized = false;
     private _toAdd: Array<HTMLDivElement> = [];
@@ -116,8 +118,10 @@ export class TextureMonitor
         this._cardWrapper = document.createElement('div');
         this._memorySizeText = document.createElement('h3');
         this._toggleArrow = document.createElement('h3');
+        this._logsPanel = new LogsPanel();
         this._optionsPanel = new OptionsPanel();
 
+        this._logsPanel.init();
         this._optionsPanel.init();
         this._toggle.classList.add('monitor-toggle');
         this._resizer.id = 'resizer';
@@ -134,12 +138,30 @@ export class TextureMonitor
         this._container.appendChild(this._toggle);
         this._container.appendChild(this._resizer);
         this._container.appendChild(this._cardWrapper);
+        this._container.appendChild(this._logsPanel.div);
         this._container.appendChild(this._optionsPanel.div);
 
         if (sessionStorage.getItem('REMOVE_CIB') === 'true' || sessionStorage.getItem('REMOVE_CIB') === null)
         {
             this._optionsPanel.miscGroup.buttons.bitmap.div.classList.remove('toggled');
         }
+
+        // Initially toggle the logs panel off
+        this._optionsPanel.miscGroup.buttons.logs.div.classList.remove('toggled');
+        this._toggleLogs(); 
+
+        // TO BE REMOVED: Logs Panel Tests
+        this._logsPanel.log('These');
+        this._logsPanel.log('are');
+        this._logsPanel.log('test');
+        this._logsPanel.log('messages');
+        this._logsPanel.log('and');
+        this._logsPanel.log('the');
+        this._logsPanel.log('logs');
+        this._logsPanel.log('panel');
+        this._logsPanel.log('works');
+        this._logsPanel.log('!');
+        this._logsPanel.log(':)');
 
         this._setupListeners();
 
@@ -287,6 +309,11 @@ export class TextureMonitor
         {
             this._updateCreateImageBitmap();
         }
+
+        if (action === ToggleAction.TOGGLE_LOGS)
+        {
+            this._toggleLogs();
+        }
     }
 
     public _initCreateImageBitmap(): void
@@ -306,6 +333,20 @@ export class TextureMonitor
         {
             window.createImageBitmap = (window as any).defaultCreateImageBitmap;
             sessionStorage.setItem('REMOVE_CIB', 'false');
+        }
+    }
+
+    public _toggleLogs(): void
+    {
+        if (this._optionsPanel.miscGroup.buttons.logs.div.classList.contains('toggled'))
+        {
+            this._cardWrapper.style.display = 'none';
+            this._logsPanel.div.style.display = 'block';
+        }
+        else
+        {
+            this._cardWrapper.style.display = 'grid';
+            this._logsPanel.div.style.display = 'none';
         }
     }
 

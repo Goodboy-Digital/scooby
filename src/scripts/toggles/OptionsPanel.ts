@@ -1,5 +1,5 @@
 import { Signal } from 'typed-signals';
-import { ToggleType } from './ToggleButton';
+import { ToggleAction, ToggleType } from './ToggleButton';
 import { ToggleButtonGroup } from './ToggleButtonGroup';
 
 export class OptionsPanel
@@ -22,7 +22,8 @@ export class OptionsPanel
     miscGroup = new ToggleButtonGroup({
         text: 'misc',
         buttonsData: {
-            bitmap: { type: ToggleType.KILL, text: 'Kill createImageBitmap' },
+            bitmap: { type: ToggleType.KILL, text: 'Kill createImageBitmap', action: ToggleAction.TOGGLE_KILL_CREATE_IMAGE_BITMAP },
+            logs: { type: ToggleType.LOGS, text: 'Logs', action: ToggleAction.TOGGLE_LOGS },
         }
     });
 
