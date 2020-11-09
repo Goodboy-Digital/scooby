@@ -31,12 +31,17 @@ export class TextureMonitor
     private _textureMap: Map<WebGLTexture, TextureData> = new Map();
     private _toggle: HTMLDivElement;
     private _container: HTMLDivElement;
+    private _resizer: HTMLDivElement;
     private _cardWrapper: HTMLDivElement;
     private _memorySizeText: HTMLHeadingElement;
     private _toggleArrow: HTMLHeadingElement;
     private _optionsPanel: OptionsPanel;
     private _initialized = false;
     private _toAdd: Array<HTMLDivElement> = [];
+
+    private isMouseDown: Boolean
+    private mouseStartPosition: number
+    private containerStartHeight: number
 
     static generateTypeMap(gl: WebGLRenderingContext): Record<GLenum, number>
     {
@@ -103,8 +108,11 @@ export class TextureMonitor
 
     public init(): void
     {
+        this.isMouseDown = false;
+
         this._toggle = document.createElement('div');
         this._container = document.createElement('div');
+        this._resizer = document.createElement('div');
         this._cardWrapper = document.createElement('div');
         this._memorySizeText = document.createElement('h3');
         this._toggleArrow = document.createElement('h3');
@@ -112,6 +120,7 @@ export class TextureMonitor
 
         this._optionsPanel.init();
         this._toggle.classList.add('monitor-toggle');
+        this._resizer.id = 'resizer';
         this._container.id = 'texture-monitor-container';
         this._cardWrapper.classList.add('entities-wrapper');
         this._toggleArrow.id = 'toggle-chevron';
@@ -123,6 +132,7 @@ export class TextureMonitor
         attachToDocument(this._container);
 
         this._container.appendChild(this._toggle);
+        this._container.appendChild(this._resizer);
         this._container.appendChild(this._cardWrapper);
         this._container.appendChild(this._optionsPanel.div);
 
@@ -233,6 +243,37 @@ export class TextureMonitor
         this._optionsPanel.onToggled.connect((action) => this._handleToggles(action));
 
         convertToScrollContainer(this._cardWrapper);
+        this.setupResizer();
+    }
+
+    private setupResizer(): void
+    {
+        this._resizer.addEventListener('mousedown', (e: MouseEvent) =>
+        {
+            if (!(e.target === this._resizer || this._resizer.contains((e.target as Node)))) return;
+
+            this.isMouseDown = true;
+            this.mouseStartPosition = e.clientY;
+            this.containerStartHeight = this._container.scrollHeight;
+        });
+
+        document.addEventListener('mouseup', () =>
+        {
+            this.isMouseDown = false;
+        });
+
+        document.addEventListener('mousemove', (e: MouseEvent) =>
+        {
+            // Hardcoded min/max - but could be adaptive
+            const minHeight = 202;
+            const maxHeight = 725;
+            
+            if (this.isMouseDown && Math.round(this._container.scrollHeight) >= minHeight && Math.round(this._container.scrollHeight) <= maxHeight)
+            {
+                const newPos = Math.max(Math.min(this.containerStartHeight - (e.clientY - this.mouseStartPosition), maxHeight), minHeight);
+                this._container.style.height = `${newPos}px`;
+            }
+        });
     }
 
     public _handleToggles(action: ToggleAction): void

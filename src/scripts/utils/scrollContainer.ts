@@ -5,7 +5,7 @@ export interface ScrollableContainer extends HTMLDivElement
     initialScroll?: number;
 }
 
-export function convertToScrollContainer(container:ScrollableContainer): void
+export function convertToScrollContainer(container: ScrollableContainer): void
 {
     document.addEventListener('mousedown', (e: MouseEvent) =>
     {
