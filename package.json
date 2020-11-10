@@ -1,6 +1,6 @@
 {
-  "name": "@goodboydigital/webgl-texture-monitor",
-  "version": "1.0.0",
+  "name": "@goodboydigital/scooby",
+  "version": "0.0.0",
   "description": "WebGL GUI texture monitoring tool for web content",
   "main": "dist/esm/TextureMonitor.js",
   "module": "dist/esm/TextureMonitor.js",
@@ -13,18 +13,20 @@
     "build": "npm run build:npm && npm run build:chrome",
     "build:npm": "rollup -c",
     "build:chrome": "rollup -c rollup.config.chrome.js && node tools/index.js && rimraf temp",
-    "watch:npm": "rollup -c -w"
+    "watch:npm": "rollup -c -w",
+    "preversion": "npm run clean && npm run lint",
+    "postversion": "npm run build"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Goodboy-Digital/webgl-texture-monitor.git"
+    "url": "git+https://github.com/Goodboy-Digital/scooby.git"
   },
   "author": "Goodboy Digital",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Goodboy-Digital/webgl-texture-monitor/issues"
+    "url": "https://github.com/Goodboy-Digital/scooby/issues"
   },
-  "homepage": "https://github.com/Goodboy-Digital/webgl-texture-monitor#readme",
+  "homepage": "https://github.com/Goodboy-Digital/scooby#readme",
   "pre-commit": [
     "lint"
   ],
@@ -32,7 +34,7 @@
     "@goodboydigital/eslint-config": "^1.7.3",
     "@rollup/plugin-commonjs": "^16.0.0",
     "@rollup/plugin-node-resolve": "^10.0.0",
-    "eslint": "^7.12.1",
+    "eslint": "^7.13.0",
     "node-sass": "^5.0.0",
     "pre-commit": "^1.2.2",
     "rimraf": "3.0.2",
