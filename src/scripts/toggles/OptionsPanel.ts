@@ -28,7 +28,7 @@ export class OptionsPanel
         buttonsData: {
             bitmap: {
                 type: ToggleType.KILL,
-                text: 'Kill CIB',
+                text: 'Kill createImageBitmap',
                 action: ToggleAction.TOGGLE_KILL_CREATE_IMAGE_BITMAP,
             },
             logs: { type: ToggleType.LOGS, text: 'Logs', action: ToggleAction.TOGGLE_LOGS },
