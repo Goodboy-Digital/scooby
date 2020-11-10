@@ -2,6 +2,7 @@ import { TextureCard } from './TextureCard';
 import { OptionsPanel } from './toggles/OptionsPanel';
 import { ToggleAction, ToggleButton } from './toggles/ToggleButton';
 import { attachToDocument } from './utils/document/attachToDocument';
+import { convertToResizeContainer, ResizeableContainer } from './utils/resizeContainer';
 import { convertToScrollContainer } from './utils/scrollContainer';
 import { calculateSize } from './utils/textures/calculateFileSize';
 import { calculateTextureSize } from './utils/textures/calculateTextureSize';
@@ -30,6 +31,7 @@ export class TextureMonitor
     private _textureMap: Map<WebGLTexture, TextureData> = new Map();
     private _toggle: HTMLDivElement;
     private _container: HTMLDivElement;
+    private _resizer: ResizeableContainer;
     private _cardWrapper: HTMLDivElement;
     private _memorySizeText: HTMLHeadingElement;
     private _toggleArrow: HTMLHeadingElement;
@@ -60,6 +62,7 @@ export class TextureMonitor
     {
         this._toggle = document.createElement('div');
         this._container = document.createElement('div');
+        this._resizer = document.createElement('div');
         this._cardWrapper = document.createElement('div');
         this._memorySizeText = document.createElement('h3');
         this._toggleArrow = document.createElement('h3');
@@ -67,6 +70,7 @@ export class TextureMonitor
 
         this._optionsPanel.init();
         this._toggle.classList.add('monitor-toggle');
+        this._resizer.id = 'resizer';
         this._container.id = 'texture-monitor-container';
         this._cardWrapper.classList.add('entities-wrapper');
         this._toggleArrow.id = 'toggle-chevron';
@@ -78,6 +82,7 @@ export class TextureMonitor
         attachToDocument(this._container);
 
         this._container.appendChild(this._toggle);
+        this._container.appendChild(this._resizer);
         this._container.appendChild(this._cardWrapper);
         this._container.appendChild(this._optionsPanel.div);
 
@@ -216,6 +221,7 @@ export class TextureMonitor
         this._optionsPanel.onBtnClick.connect((action) => this._handleToggles(action));
 
         convertToScrollContainer(this._cardWrapper);
+        convertToResizeContainer(this._resizer, this._container);
     }
 
     /**
