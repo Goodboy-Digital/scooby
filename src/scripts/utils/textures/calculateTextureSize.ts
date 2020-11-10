@@ -1,3 +1,9 @@
+/**
+ * Calculates the width, height, and memory usage of a texture
+ * @param args - arguments from canvas texImage2d
+ * @param formatMap - a map of texture formats
+ * @param typeMap - a map of GLenum to byte size
+ */
 export function calculateTextureSize(
     args: IArguments,
     formatMap:Record<GLenum, number>,

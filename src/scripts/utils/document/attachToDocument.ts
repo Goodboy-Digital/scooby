@@ -1,3 +1,7 @@
+/**
+ * Attaches an element to the document
+ * @param container - element to be attached
+ */
 export function attachToDocument(container: HTMLDivElement): void
 {
     const targets = [document.body, document.head, document.documentElement];

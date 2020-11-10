@@ -1,4 +1,5 @@
 import { Signal } from 'typed-signals';
+
 import { ToggleButton, ToggleButtonData } from './ToggleButton';
 
 export interface ToggleButtonGroupData
@@ -9,11 +10,11 @@ export interface ToggleButtonGroupData
 
 export class ToggleButtonGroup
 {
-    div: HTMLDivElement;
-    text: string;
-    buttons: Record<string, ToggleButton>;
+    public div: HTMLDivElement;
+    public buttons: Record<string, ToggleButton>;
+    public onBtnClicked = new Signal();
 
-    onToggled = new Signal();
+    private text: string;
 
     constructor(data: ToggleButtonGroupData)
     {
@@ -26,6 +27,9 @@ export class ToggleButtonGroup
         }
     }
 
+    /**
+     * Creates the html elements and initialises the buttons
+     */
     init(parent: HTMLDivElement): void
     {
         this.div = document.createElement('div');
@@ -36,12 +40,24 @@ export class ToggleButtonGroup
         parent.appendChild(this.div);
     }
 
+    /**
+     * connects to all the buttons signals
+     */
     public setupListeners(): void
     {
-        Object.values(this.buttons).forEach((button) => 
+        Object.values(this.buttons).forEach((button) =>
         {
             button.setupListeners();
-            button.onToggled.connect((action) => this.onToggled.emit(action));
+            button.onClicked.connect((action) => this.onBtnClicked.emit(action));
         });
+    }
+
+    /**
+     * Returns a button from the group
+     * @param id - id of the button you want to get
+     */
+    public getButton(id: string): ToggleButton
+    {
+        return this.buttons[id];
     }
 }
