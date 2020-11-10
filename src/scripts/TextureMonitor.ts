@@ -13,6 +13,7 @@ declare global
     interface Window
     {
         defaultCreateImageBitmap: typeof window.createImageBitmap
+        SCOOBY: TextureMonitor
     }
 }
 
@@ -71,8 +72,8 @@ export class TextureMonitor
         this._logsPanel = new LogsPanel();
         this._optionsPanel = new OptionsPanel();
 
-        this._logsPanel.init();
         this._optionsPanel.init();
+        this._logsPanel.init(this._optionsPanel, this._cardWrapper);
         this._toggle.classList.add('monitor-toggle');
         this._resizer.id = 'resizer';
         this._container.id = 'texture-monitor-container';
@@ -100,27 +101,9 @@ export class TextureMonitor
             this._optionsPanel.miscGroup.getButton('bitmap').div.classList.remove('toggled');
         }
 
-        // Initially toggle the logs panel off
-        this._optionsPanel.miscGroup.buttons.logs.div.classList.remove('toggled');
-        this._toggleLogs();
-
-        // TO BE REMOVED: Logs Panel Tests
-        this._logsPanel.log('These');
-        this._logsPanel.log('are');
-        this._logsPanel.log('test');
-        this._logsPanel.log('messages');
-        this._logsPanel.log('and');
-        this._logsPanel.log('the');
-        this._logsPanel.log('logs');
-        this._logsPanel.log('panel');
-        this._logsPanel.log('works');
-        this._logsPanel.log('!');
-        this._logsPanel.log(':)');
-
-        this._setupListeners();
-
         this._initialized = true;
 
+        this._setupListeners();
         this._firstList();
     }
 
@@ -222,6 +205,15 @@ export class TextureMonitor
     }
 
     /**
+     * Logs a message to the built in console
+     * @param message - message to be logged
+     */
+    public log(message:string): void
+    {
+        this._logsPanel.log(message);
+    }
+
+    /**
      * sets up listeners for the toggle buttons
      * and sets the cardWrapper to be scrollable
      */
@@ -256,10 +248,9 @@ export class TextureMonitor
             case ToggleAction.TOGGLE_KILL_CREATE_IMAGE_BITMAP:
                 this._updateCreateImageBitmap();
                 break;
-        }
-        if (action === ToggleAction.TOGGLE_LOGS)
-        {
-            this._toggleLogs();
+            case ToggleAction.TOGGLE_LOGS:
+                this._logsPanel.toggle();
+                break;
         }
     }
 
@@ -277,20 +268,6 @@ export class TextureMonitor
         {
             window.createImageBitmap = window.defaultCreateImageBitmap;
             sessionStorage.setItem(TextureMonitor.CIB_KEY, 'true');
-        }
-    }
-
-    public _toggleLogs(): void
-    {
-        if (this._optionsPanel.miscGroup.buttons.logs.div.classList.contains('toggled'))
-        {
-            this._cardWrapper.style.display = 'none';
-            this._logsPanel.div.style.display = 'block';
-        }
-        else
-        {
-            this._cardWrapper.style.display = 'grid';
-            this._logsPanel.div.style.display = 'none';
         }
     }
 

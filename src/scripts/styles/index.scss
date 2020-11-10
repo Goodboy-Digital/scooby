@@ -256,14 +256,14 @@ $filter-button-deleted-color: rgb(233, 30, 99);
         padding: 0.5em 0.5em 0 0.5em;
         position: relative;
         overscroll-behavior: contain;
-        background-color: darken($background-color, 15%);
+        background-color: darken($background-color, 5%);
         color: $white-color;
 
         #clear-button{
             position: fixed;
             bottom: 0;
             right: 3.5rem;
-            border-radius: 0.5em 0.5em 0 0;
+            border-radius: 0.2em 0.2em 0 0;
             color: $white-color;
             $filter-button-color: rgb(109, 109, 109);
             background-color: $filter-button-color;
@@ -334,14 +334,14 @@ $filter-button-deleted-color: rgb(233, 30, 99);
             & > h4{
                 display: inline-block;
                 color: $white-color;
-                margin: 0.5em; 
+                margin: 0.5em;
                 font-size: small;
             }
 
             & > * {
                 margin:0 0.3em;
             }
-    
+
             // Hacky - Using px here instead to avoid em chained calculations
             .filter-button{
                 height: 100%;
@@ -358,7 +358,7 @@ $filter-button-deleted-color: rgb(233, 30, 99);
                 transform: translateY(0);
                 transition: all 0.15s ease-out;
                 font-size: small;
-    
+
                 &:last-child{
                     margin-bottom: 0;
                 }
@@ -373,7 +373,7 @@ $filter-button-deleted-color: rgb(233, 30, 99);
                     background-color: $filter-button-color;
                     transition: all 0.15s ease-out;
                 }
-    
+
                 &::after{
                     content: '';
                     position: absolute;
@@ -386,13 +386,13 @@ $filter-button-deleted-color: rgb(233, 30, 99);
                     opacity: 0;
                     transition: all 0.15s ease-out;
                 }
-    
+
                 &:hover{
                     &::after{
                         opacity: 0.10;
                     }
                 }
-    
+
                 &.active{
                     $filter-button-color: $filter-button-active-color;
                     &.toggled{
