@@ -1,16 +1,21 @@
 import { TextureData } from './TextureMonitor';
-import { getByteSize } from './utils/calculateFileSize';
+import { getByteSize } from './utils/textures/calculateFileSize';
 
 export class TextureCard
 {
-    div: HTMLDivElement;
-    info: HTMLDivElement;
-    extra: HTMLDivElement;
-    dimension: HTMLHeadingElement;
-    size: HTMLHeadingElement;
-    name: HTMLHeadingElement;
+    public div: HTMLDivElement;
+    private info: HTMLDivElement;
+    private extra: HTMLDivElement;
+    private dimension: HTMLHeadingElement;
+    private size: HTMLHeadingElement;
+    private name: HTMLHeadingElement;
 
-    init(data: TextureData, gpuMemory: number): void
+    /**
+     * Creates the html elements and attaches itself to its holder so it is displayed in the list
+     * @param data - data to be displayed
+     * @param gpuMemory - number of bytes the texture uses
+     */
+    public init(data: TextureData, gpuMemory: number): void
     {
         this.div = document.createElement('div');
         this.info = document.createElement('div');

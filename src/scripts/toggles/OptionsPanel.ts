@@ -1,4 +1,5 @@
 import { Signal } from 'typed-signals';
+
 import { ToggleType } from './ToggleButton';
 import { ToggleButtonGroup } from './ToggleButtonGroup';
 
@@ -9,21 +10,23 @@ export class OptionsPanel
         text: 'type',
         buttonsData: {
             texture: { type: ToggleType.NORMAL, text: 'Textures' },
-            misc: { type: ToggleType.NORMAL, text: 'Others' }
-        }
+            misc: { type: ToggleType.NORMAL, text: 'Others' },
+        },
     });
+
     statusGroup = new ToggleButtonGroup({
         text: 'status',
         buttonsData: {
             active: { type: ToggleType.ACTIVE, text: 'Active' },
             deleted: { type: ToggleType.DELETED, text: 'Deleted' },
-        }
+        },
     });
+
     miscGroup = new ToggleButtonGroup({
         text: 'misc',
         buttonsData: {
             bitmap: { type: ToggleType.KILL, text: 'Kill createImageBitmap' },
-        }
+        },
     });
 
     onToggled = new Signal();

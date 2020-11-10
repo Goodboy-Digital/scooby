@@ -1,4 +1,5 @@
 import { Signal } from 'typed-signals';
+
 import { ToggleButton, ToggleButtonData } from './ToggleButton';
 
 export interface ToggleButtonGroupData
@@ -36,9 +37,12 @@ export class ToggleButtonGroup
         parent.appendChild(this.div);
     }
 
+    /**
+     * connects to all the buttons signals
+     */
     public setupListeners(): void
     {
-        Object.values(this.buttons).forEach((button) => 
+        Object.values(this.buttons).forEach((button) =>
         {
             button.setupListeners();
             button.onToggled.connect((action) => this.onToggled.emit(action));

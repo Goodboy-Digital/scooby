@@ -1,12 +1,19 @@
 import { TextureCard } from './TextureCard';
 import { OptionsPanel } from './toggles/OptionsPanel';
 import { ToggleAction, ToggleButton } from './toggles/ToggleButton';
-import { attachToDocument } from './utils/attachToDocument';
-import { calculateSize } from './utils/calculateFileSize';
-import { calculateTextureSize } from './utils/calculateTextureSize';
+import { attachToDocument } from './utils/document/attachToDocument';
 import { convertToScrollContainer } from './utils/scrollContainer';
+import { calculateSize } from './utils/textures/calculateFileSize';
+import { calculateTextureSize } from './utils/textures/calculateTextureSize';
 
-// html stuff
+declare global
+{
+    interface Window
+    {
+        defaultCreateImageBitmap: typeof window.createImageBitmap
+    }
+}
+
 export interface TextureData
 {
     size: number,
@@ -17,17 +24,9 @@ export interface TextureData
     cardHolder: HTMLDivElement
 }
 
-export enum WebGLRenderingContexts
-    {
-    WEBGL = 'webgl',
-    EXPERIMENTAL_WEBGL = 'experimental-webgl',
-    WEBGL2 = 'webgl2',
-    EXPERIMENTAL_WEBGL2 = 'experimental-webgl2',
-}
-
 export class TextureMonitor
 {
-    public static contextNames = ['webgl', 'experimental-webgl', 'webgl2', 'experimental-webgl2'];
+    private static CIB_KEY = 'SCOOBY_REMOVE_CIB';
     private _textureMap: Map<WebGLTexture, TextureData> = new Map();
     private _toggle: HTMLDivElement;
     private _container: HTMLDivElement;
@@ -38,69 +37,25 @@ export class TextureMonitor
     private _initialized = false;
     private _toAdd: Array<HTMLDivElement> = [];
 
-    static generateTypeMap(gl: WebGLRenderingContext): Record<GLenum, number>
-    {
-        const typeMap: Record<GLenum, number> = {};
-
-        typeMap[gl.UNSIGNED_BYTE] = 1;
-        typeMap[gl.UNSIGNED_SHORT_4_4_4_4] = 0.5;
-        typeMap[36193] = 2;
-        typeMap[gl.FLOAT] = 4;
-
-        return typeMap;
-    }
-
-    static generateFormatMap(gl: WebGLRenderingContext): Record<GLenum, number>
-    {
-        const formatMap: Record<GLenum, number> = {};
-
-        formatMap[gl.RGBA] = 4;
-        formatMap[gl.RGB] = 3;
-
-        return formatMap;
-    }
-
-    static generateTextureMap(gl: WebGLRenderingContext): Record<GLenum, number>
-    {
-        const textureMap: Record<GLenum, number> = {};
-
-        textureMap[gl.TEXTURE_2D] = gl.TEXTURE_BINDING_2D;
-        textureMap[gl.TEXTURE_CUBE_MAP] = gl.TEXTURE_BINDING_CUBE_MAP;
-        textureMap[gl.TEXTURE_CUBE_MAP_NEGATIVE_X] = gl.TEXTURE_BINDING_CUBE_MAP;
-        textureMap[gl.TEXTURE_CUBE_MAP_NEGATIVE_Y] = gl.TEXTURE_BINDING_CUBE_MAP;
-        textureMap[gl.TEXTURE_CUBE_MAP_NEGATIVE_Z] = gl.TEXTURE_BINDING_CUBE_MAP;
-        textureMap[gl.TEXTURE_CUBE_MAP_POSITIVE_X] = gl.TEXTURE_BINDING_CUBE_MAP;
-        textureMap[gl.TEXTURE_CUBE_MAP_POSITIVE_Y] = gl.TEXTURE_BINDING_CUBE_MAP;
-        textureMap[gl.TEXTURE_CUBE_MAP_POSITIVE_Z] = gl.TEXTURE_BINDING_CUBE_MAP;
-
-        return textureMap;
-    }
-
-    static getContextType(contextType: string): WebGLRenderingContext|WebGL2RenderingContext
-    {
-        switch (contextType)
-        {
-            case WebGLRenderingContexts.WEBGL:
-            case WebGLRenderingContexts.EXPERIMENTAL_WEBGL:
-                return WebGLRenderingContext.prototype;
-            case WebGLRenderingContexts.WEBGL2:
-            case WebGLRenderingContexts.EXPERIMENTAL_WEBGL2:
-                return WebGL2RenderingContext.prototype;
-        }
-
-        return null;
-    }
-
+    /**
+     * Store a reference to the windows createImageBitmap function and
+     * sets the original to null if the kill button is active
+     */
     public static overrideCreateImageBitmap(): void
     {
-        (window as any).defaultCreateImageBitmap = window.createImageBitmap;
+        window.defaultCreateImageBitmap = window.createImageBitmap;
 
-        if (sessionStorage.getItem('REMOVE_CIB') === 'true')
+        if (sessionStorage.getItem(TextureMonitor.CIB_KEY) === 'false')
         {
             window.createImageBitmap = null;
         }
     }
 
+    /**
+     * Creates all of the html elements needed for the texture monitor to work.
+     * Attaches itself to the document.
+     * Populates the list with any items that need to be added
+     */
     public init(): void
     {
         this._toggle = document.createElement('div');
@@ -126,8 +81,12 @@ export class TextureMonitor
         this._container.appendChild(this._cardWrapper);
         this._container.appendChild(this._optionsPanel.div);
 
-        if (sessionStorage.getItem('REMOVE_CIB') === 'true' || sessionStorage.getItem('REMOVE_CIB') === null)
+        if (
+            sessionStorage.getItem(TextureMonitor.CIB_KEY) === 'true'
+            || sessionStorage.getItem(TextureMonitor.CIB_KEY) === null
+        )
         {
+            sessionStorage.setItem(TextureMonitor.CIB_KEY, 'true');
             this._optionsPanel.miscGroup.buttons.bitmap.div.classList.remove('toggled');
         }
 
@@ -138,7 +97,11 @@ export class TextureMonitor
         this._firstList();
     }
 
-    public createTextureCard(glTexture: WebGLTexture): void
+    /**
+     * Creates the data needed for a texture card
+     * @param glTexture - texture to be stored as a key for its data
+     */
+    public createTextureCardData(glTexture: WebGLTexture): void
     {
         const textureCard = document.createElement('div');
 
@@ -154,6 +117,11 @@ export class TextureMonitor
         });
     }
 
+    /**
+     * Sets the texture card data mipped to be true
+     * Recalculates the total memory usage
+     * @param webGLTexture - key for texture card data
+     */
     public generateMipmap(webGLTexture: WebGLTexture): void
     {
         this._textureMap.get(webGLTexture).mipped = true;
@@ -162,6 +130,10 @@ export class TextureMonitor
         { this._memorySizeText.innerHTML = `<span>${calculateSize(this._textureMap)}</span>`; }
     }
 
+    /**
+     * Removes a texture card and recalculates total memory usage
+     * @param glTexture - key for texture card data
+     */
     public deleteTexture(glTexture: WebGLTexture): void
     {
         const data = this._textureMap.get(glTexture);
@@ -175,6 +147,13 @@ export class TextureMonitor
         }
     }
 
+    /**
+     * Creates a new texture card and adds it to the list
+     * @param args - arguments from canvas texImage2d
+     * @param formatMap - a map of texture formats
+     * @param typeMap - a map of GLenum to byte size
+     * @param glTexture - key for texture card data
+     */
     public texImage2d(args: IArguments,
         formatMap:Record<GLenum, number>,
         typeMap:Record<GLenum, number>,
@@ -215,6 +194,10 @@ export class TextureMonitor
         }
     }
 
+    /**
+     * sets up listeners for the toggle buttons
+     * and sets the cardWrapper to be scrollable
+     */
     private _setupListeners(): void
     {
         this._toggle.onclick = () =>
@@ -256,18 +239,21 @@ export class TextureMonitor
 
     public _updateCreateImageBitmap(): void
     {
-        if (sessionStorage.getItem('REMOVE_CIB') === 'false')
+        if (sessionStorage.getItem(TextureMonitor.CIB_KEY) === 'true')
         {
             window.createImageBitmap = null;
-            sessionStorage.setItem('REMOVE_CIB', 'true');
+            sessionStorage.setItem(TextureMonitor.CIB_KEY, 'false');
         }
         else
         {
-            window.createImageBitmap = (window as any).defaultCreateImageBitmap;
-            sessionStorage.setItem('REMOVE_CIB', 'false');
+            window.createImageBitmap = window.defaultCreateImageBitmap;
+            sessionStorage.setItem(TextureMonitor.CIB_KEY, 'true');
         }
     }
 
+    /**
+     * Adds all of the items that where created before the html was created
+     */
     private _firstList(): void
     {
         this._memorySizeText.innerHTML = `<span>${calculateSize(this._textureMap)}</span>`;
@@ -280,6 +266,9 @@ export class TextureMonitor
         this._toAdd.length = 0;
     }
 
+    /**
+     * updates the texture cards so that they display if they have been deleted or is active
+     */
     private _updateList(): void
     {
         const deleted = this._optionsPanel.statusGroup.buttons.deleted.contains('toggled');
