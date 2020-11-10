@@ -218,6 +218,10 @@ export class TextureMonitor
         convertToScrollContainer(this._cardWrapper);
     }
 
+    /**
+     * Handles the actions from the button clicks
+     * @param action - action type
+     */
     private _handleToggles(action: ToggleAction): void
     {
         switch (action)

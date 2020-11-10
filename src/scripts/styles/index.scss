@@ -270,14 +270,14 @@ $filter-button-deleted-color: rgb(233, 30, 99);
             & > h4{
                 display: inline-block;
                 color: $white-color;
-                margin: 0.5em; 
+                margin: 0.5em;
                 font-size: small;
             }
 
             & > * {
                 margin:0 0.3em;
             }
-    
+
             // Hacky - Using px here instead to avoid em chained calculations
             .filter-button{
                 height: 100%;
@@ -294,22 +294,11 @@ $filter-button-deleted-color: rgb(233, 30, 99);
                 transform: translateY(0);
                 transition: all 0.15s ease-out;
                 font-size: small;
-    
+
                 &:last-child{
                     margin-bottom: 0;
                 }
 
-                &::before{
-                    content: '';
-                    position: absolute;
-                    top: 90%;
-                    bottom: 0;
-                    left: 0;
-                    right: 0;
-                    background-color: $filter-button-color;
-                    transition: all 0.15s ease-out;
-                }
-    
                 &::after{
                     content: '';
                     position: absolute;
@@ -322,67 +311,36 @@ $filter-button-deleted-color: rgb(233, 30, 99);
                     opacity: 0;
                     transition: all 0.15s ease-out;
                 }
-    
+
                 &:hover{
+                    transform: translateY(-2px);
                     &::after{
                         opacity: 0.10;
                     }
                 }
-    
+
                 &.active{
                     $filter-button-color: $filter-button-active-color;
                     &.toggled{
                         background-color: $filter-button-color;
-                        transform: translateY(-8px);
-                        &::before{
-                            background-color: $filter-button-color;
-                            bottom: -8px;
-                        }
-                        &::after{
-                            bottom: -8px;
-                        }
                     }
                 }
                 &.deleted{
                     $filter-button-color: $filter-button-deleted-color;
                     &.toggled{
                         background-color: $filter-button-color;
-                        transform: translateY(-8px);
-                        &::before{
-                            background-color: $filter-button-color;
-                            bottom: -8px;
-                        }
-                        &::after{
-                            bottom: -8px;
-                        }
                     }
                 }
                 &.normal{
                     $filter-button-color: $filter-button-normal-color;
                     &.toggled{
                         background-color: $filter-button-color;
-                        transform: translateY(-8px);
-                        &::before{
-                            background-color: $filter-button-color;
-                            bottom: -8px;
-                        }
-                        &::after{
-                            bottom: -8px;
-                        }
                     }
                 }
                 &.kill{
                     $filter-button-color: $filter-button-kill-color;
                     &.toggled{
                         background-color: $filter-button-color;
-                        transform: translateY(-8px);
-                        &::before{
-                            background-color: $filter-button-color;
-                            bottom: -8px;
-                        }
-                        &::after{
-                            bottom: -8px;
-                        }
                     }
                 }
             }
