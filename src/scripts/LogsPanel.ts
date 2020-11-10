@@ -1,15 +1,16 @@
 export class LogsPanel
 {
-    div: HTMLDivElement;
-    text: HTMLParagraphElement;
-    clearButton: HTMLDivElement;
+    public div: HTMLDivElement;
+    public clearButton: HTMLDivElement;
+
+    private text: HTMLParagraphElement;
     private logs: string[];
 
-    init()
+    public init(): void
     {
         this.div = document.createElement('div');
         this.div.id = 'logs-wrapper';
-        
+
         this.text = document.createElement('p');
 
         this.clearButton = document.createElement('div');

@@ -1,5 +1,9 @@
-import { TextureData } from '../TextureMonitor';
+import { TextureData } from '../../TextureMonitor';
 
+/**
+ * Calculates the total memory used by the map provided
+ * @param textureMap - map of texture card data
+ */
 export function calculateSize(textureMap:Map<WebGLTexture, TextureData>): string
 {
     let totalSize = 0;
@@ -16,6 +20,11 @@ export function calculateSize(textureMap:Map<WebGLTexture, TextureData>): string
     return getByteSize(totalSize);
 }
 
+/**
+ * Calculates the total amount of memory and formats it to the correct unit
+ * @param bytes - number of bytes
+ * @param decimals - number of decimal places
+ */
 export function getByteSize(bytes: number, decimals = 2): string
 {
     if (bytes === 0) return '0 Bytes';
