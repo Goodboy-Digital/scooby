@@ -2,6 +2,7 @@ import { TextureCard } from './TextureCard';
 import { OptionsPanel } from './toggles/OptionsPanel';
 import { ToggleAction, ToggleButton } from './toggles/ToggleButton';
 import { attachToDocument } from './utils/document/attachToDocument';
+import { convertToResizeContainer, ResizeableContainer } from './utils/resizeContainer';
 import { convertToScrollContainer } from './utils/scrollContainer';
 import { calculateSize } from './utils/textures/calculateFileSize';
 import { calculateTextureSize } from './utils/textures/calculateTextureSize';
@@ -30,17 +31,13 @@ export class TextureMonitor
     private _textureMap: Map<WebGLTexture, TextureData> = new Map();
     private _toggle: HTMLDivElement;
     private _container: HTMLDivElement;
-    private _resizer: HTMLDivElement;
+    private _resizer: ResizeableContainer;
     private _cardWrapper: HTMLDivElement;
     private _memorySizeText: HTMLHeadingElement;
     private _toggleArrow: HTMLHeadingElement;
     private _optionsPanel: OptionsPanel;
     private _initialized = false;
     private _toAdd: Array<HTMLDivElement> = [];
-
-    private isMouseDown: boolean;
-    private mouseStartPosition: number;
-    private containerStartHeight: number;
 
     /**
      * Store a reference to the windows createImageBitmap function and
@@ -63,8 +60,6 @@ export class TextureMonitor
      */
     public init(): void
     {
-        this.isMouseDown = false;
-
         this._toggle = document.createElement('div');
         this._container = document.createElement('div');
         this._resizer = document.createElement('div');
@@ -226,43 +221,7 @@ export class TextureMonitor
         this._optionsPanel.onBtnClick.connect((action) => this._handleToggles(action));
 
         convertToScrollContainer(this._cardWrapper);
-        this.setupResizer();
-    }
-
-    private setupResizer(): void
-    {
-        this._resizer.addEventListener('mousedown', (e: MouseEvent) =>
-        {
-            if (!(e.target === this._resizer || this._resizer.contains((e.target as Node)))) return;
-
-            this.isMouseDown = true;
-            this.mouseStartPosition = e.clientY;
-            this.containerStartHeight = this._container.scrollHeight;
-        });
-
-        document.addEventListener('mouseup', () =>
-        {
-            this.isMouseDown = false;
-        });
-
-        document.addEventListener('mousemove', (e: MouseEvent) =>
-        {
-            // Hardcoded min/max - but could be adaptive
-            const minHeight = 202;
-            const maxHeight = 725;
-
-            if (this.isMouseDown
-                && Math.round(this._container.scrollHeight) >= minHeight
-                && Math.round(this._container.scrollHeight) <= maxHeight
-            )
-            {
-                const newPos = Math.max(Math.min(
-                    this.containerStartHeight - (e.clientY - this.mouseStartPosition), maxHeight,
-                ), minHeight);
-
-                this._container.style.height = `${newPos}px`;
-            }
-        });
+        convertToResizeContainer(this._resizer, this._container);
     }
 
     private _handleToggles(action: ToggleAction): void
