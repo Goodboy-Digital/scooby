@@ -44,7 +44,7 @@ function insertHeaderNode(node)
     }
 }
 
-const isLoadedKey = 'LOADED';
+const isLoadedKey = 'SCOOBY_LOADED';
 
 // if we have been clicked then we want to inject ourselves into the page
 if (sessionStorage.getItem(isLoadedKey) === 'true')

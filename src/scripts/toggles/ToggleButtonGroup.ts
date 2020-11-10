@@ -4,17 +4,20 @@ import { ToggleButton, ToggleType } from './ToggleButton';
 
 export class ToggleButtonGroup
 {
-    div: HTMLDivElement;
-    textureButton = new ToggleButton({ type: ToggleType.NORMAL, text: 'Textures' });
-    miscButton = new ToggleButton({ type: ToggleType.NORMAL, text: 'Misc' });
-    bitmapButton = new ToggleButton({ type: ToggleType.KILL, text: 'Kill CIB' });
-    activeButton = new ToggleButton({ type: ToggleType.ACTIVE, text: 'Active' });
-    deletedButton = new ToggleButton({ type: ToggleType.DELETED, text: 'Deleted' });
+    public div: HTMLDivElement;
+    public textureButton = new ToggleButton({ type: ToggleType.NORMAL, text: 'Textures' });
+    public miscButton = new ToggleButton({ type: ToggleType.NORMAL, text: 'Misc' });
+    public bitmapButton = new ToggleButton({ type: ToggleType.KILL, text: 'Kill CIB' });
+    public activeButton = new ToggleButton({ type: ToggleType.ACTIVE, text: 'Active' });
+    public deletedButton = new ToggleButton({ type: ToggleType.DELETED, text: 'Deleted' });
 
-    updateList = new Signal();
-    updateCreateImageBitmap = new Signal();
+    public updateList = new Signal();
+    public updateCreateImageBitmap = new Signal();
 
-    init(): void
+    /**
+     * Creates the html elements and initialises the buttons
+     */
+    public init(): void
     {
         this.div = document.createElement('div');
         this.div.id = 'filter-buttons-group';
@@ -26,6 +29,9 @@ export class ToggleButtonGroup
         this.bitmapButton.init(this.div);
     }
 
+    /**
+     * connects to all the buttons signals
+     */
     public setupListeners(): void
     {
         this.textureButton.setupListeners();
