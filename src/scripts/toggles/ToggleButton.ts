@@ -16,11 +16,11 @@ export interface ToggleButtonData
 
 export class ToggleButton
 {
-    div: HTMLDivElement;
-    type: ToggleType;
-    text: string;
+    public updateList = new Signal();
+    public div: HTMLDivElement;
 
-    updateList = new Signal();
+    private type: ToggleType;
+    private text: string;
 
     constructor(data: ToggleButtonData)
     {
@@ -28,7 +28,11 @@ export class ToggleButton
         this.text = data.text;
     }
 
-    init(parent: HTMLDivElement): void
+    /**
+     * Creates the html elements and attaches to a parent
+     * @param parent - element to be attached too
+     */
+    public init(parent: HTMLDivElement): void
     {
         this.div = document.createElement('div');
         this.div.classList.add('filter-button', this.type);
@@ -38,6 +42,9 @@ export class ToggleButton
         parent.appendChild(this.div);
     }
 
+    /**
+     * sets up the onclick listener for the div
+     */
     public setupListeners(): void
     {
         this.div.onclick = () =>
@@ -55,6 +62,10 @@ export class ToggleButton
         };
     }
 
+    /**
+     * Checks if the div classList contains a certain id
+     * @param type - class id to check
+     */
     public contains(type: string): boolean
     {
         return this.div.classList.contains(type);

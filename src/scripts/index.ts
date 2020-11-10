@@ -4,19 +4,27 @@
 import './styles/index.scss';
 
 import { TextureMonitor } from './TextureMonitor';
+import { getContextType } from './utils/document/getContextType';
+import { generateFormatMap } from './utils/maps/generateFormatMap';
+import { generateTextureMap } from './utils/maps/generateTextureMap';
+import { generateTypeMap } from './utils/maps/generateTypeMap';
+
+interface OverrideHTMLCanvasElement extends HTMLCanvasElement
+{
+    __Origin_EXTENSION_GetContext: {
+        (contextId: '2d', options?: CanvasRenderingContext2DSettings): CanvasRenderingContext2D;
+        (contextId: 'bitmaprenderer', options?: ImageBitmapRenderingContextSettings): ImageBitmapRenderingContext;
+        (contextId: 'webgl', options?: WebGLContextAttributes): WebGLRenderingContext;
+        (contextId: 'webgl2', options?: WebGLContextAttributes): WebGL2RenderingContext;
+        (contextId: string, options?: any): RenderingContext;
+    }
+}
 
 TextureMonitor.overrideCreateImageBitmap();
 const textureMonitor = new TextureMonitor();
-
 const __Origin_EXTENSION_GetContext = HTMLCanvasElement.prototype.getContext;
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-HTMLCanvasElement.prototype.__Origin_EXTENSION_GetContext = __Origin_EXTENSION_GetContext;
-
-// const isDown = false;
-// let startY: number;
-// let initialScroll: number;
+(HTMLCanvasElement.prototype as OverrideHTMLCanvasElement).__Origin_EXTENSION_GetContext = __Origin_EXTENSION_GetContext;
 
 HTMLCanvasElement.prototype.getContext = function ()
 {
@@ -49,17 +57,17 @@ HTMLCanvasElement.prototype.getContext = function ()
     if (contextNames.indexOf(arguments[0]) !== -1)
     {
         const gl = context as WebGLRenderingContext;
-        const RenderingContext = TextureMonitor.getContextType(contextNames[contextNames.indexOf(arguments[0])]);
-        const typeMap: Record<GLenum, number> = TextureMonitor.generateTypeMap(gl);
-        const formatMap: Record<GLenum, number> = TextureMonitor.generateFormatMap(gl);
-        const getTextureMap:Record<GLenum, GLenum> = TextureMonitor.generateTextureMap(gl);
+        const RenderingContext = getContextType(contextNames[contextNames.indexOf(arguments[0])]);
+        const typeMap: Record<GLenum, number> = generateTypeMap(gl);
+        const formatMap: Record<GLenum, number> = generateFormatMap(gl);
+        const getTextureMap:Record<GLenum, GLenum> = generateTextureMap(gl);
 
         // TODO - There will be an issue with cube textures for sure!
         gl.createTexture = function ()
         {
             const glTexture: WebGLTexture = RenderingContext.createTexture.apply(this, arguments);
 
-            textureMonitor.createTextureCard(glTexture);
+            textureMonitor.createTextureCardData(glTexture);
 
             return glTexture;
         };
@@ -76,7 +84,6 @@ HTMLCanvasElement.prototype.getContext = function ()
 
         gl.deleteTexture = function ()
         {
-            // Feature to be added - accumulating consumption saved + replace duplicate te textures
             const glTexture = arguments[0];
 
             textureMonitor.deleteTexture(glTexture);
