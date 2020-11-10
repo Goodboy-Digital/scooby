@@ -20,7 +20,7 @@ export class LogsPanel
 
         this._clearButton = document.createElement('div');
         this._clearButton.id = 'clear-button';
-        this._clearButton.innerHTML = 'CLEAR';
+        this._clearButton.innerHTML = 'Clear';
         this._clearButton.onclick = this.clear.bind(this);
 
         this.div.appendChild(this._text);

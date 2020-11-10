@@ -258,21 +258,35 @@ $filter-button-deleted-color: rgb(233, 30, 99);
         overscroll-behavior: contain;
         background-color: darken($background-color, 5%);
         color: $white-color;
+        box-shadow: inset 0 0 0.9em hsla(0, 0, 0, 0.5);
 
         #clear-button{
             position: fixed;
-            bottom: 0;
-            right: 3.5rem;
-            border-radius: 0.2em 0.2em 0 0;
+            top: 16px;
+            right: 2.5rem;
+            border-radius: 0 0 0.2em 0.2em;
             color: $white-color;
             $filter-button-color: rgb(109, 109, 109);
             background-color: $filter-button-color;
-            padding: 0.5em 0.8em 1em 0.8em;
+            padding: 0.5em 0.8em;
             cursor: pointer;
-            transform: translateY(0.5em);
+            transform: translateY(0);
             transition: all 0.15s ease-out;
             font-size: small;
+            font-weight: bold;
             opacity: 1;
+            box-shadow: 0 0.125em 0.4375em hsla(0, 0, 0, 0.5);
+
+            &::before{	
+                content: '';	
+                position: absolute;	
+                top: 0;	
+                bottom: 90%;	
+                left: 0;	
+                right: 0;	
+                background-color: $filter-button-color;	
+                transition: all 0.15s ease-out;	
+            }
 
             &::after{
                 content: '';
@@ -288,9 +302,13 @@ $filter-button-deleted-color: rgb(233, 30, 99);
             }
 
             &:hover{
-                transform: translateY(0);
+                transform: translateY(2px);
                 &::after{
                     opacity: 0.10;
+                    top: -2px;
+                }
+                &::before{
+                    top: -2px;
                 }
             }
 
@@ -300,6 +318,22 @@ $filter-button-deleted-color: rgb(233, 30, 99);
                     opacity: 0.05;
                 }
             }
+        }
+
+        &::-webkit-scrollbar-track{
+            box-shadow: inset 0 0 0.375em rgba(0,0,0,0.3);
+            border-radius: 0.2em;
+            background-color: $scroll-secondary-color;
+        }
+
+        &::-webkit-scrollbar{
+            width: 0.75em;
+        }
+
+        &::-webkit-scrollbar-thumb{
+            border-radius: 0.2em;
+            box-shadow: inset 0 0 0.375em rgba(0,0,0,.3);
+            background-color: $scroll-primary-color;
         }
     }
 
@@ -363,6 +397,17 @@ $filter-button-deleted-color: rgb(233, 30, 99);
                     margin-bottom: 0;
                 }
 
+                &::before{	
+                    content: '';	
+                    position: absolute;	
+                    top: 90%;	
+                    bottom: 0;	
+                    left: 0;	
+                    right: 0;	
+                    background-color: $filter-button-color;	
+                    transition: all 0.15s ease-out;	
+                }
+
                 &::after{
                     content: '';
                     position: absolute;
@@ -380,6 +425,11 @@ $filter-button-deleted-color: rgb(233, 30, 99);
                     transform: translateY(-2px);
                     &::after{
                         opacity: 0.10;
+                        bottom: -2px;
+                    }
+                    &::before{
+                        background-color: $filter-button-color;
+                        bottom: -2px;
                     }
                 }
 
@@ -387,30 +437,45 @@ $filter-button-deleted-color: rgb(233, 30, 99);
                     $filter-button-color: $filter-button-active-color;
                     &.toggled{
                         background-color: $filter-button-color;
+                        &::before{
+                            background-color: $filter-button-color;
+                        }
                     }
                 }
                 &.deleted{
                     $filter-button-color: $filter-button-deleted-color;
                     &.toggled{
                         background-color: $filter-button-color;
+                        &::before{
+                            background-color: $filter-button-color;
+                        }
                     }
                 }
                 &.normal{
                     $filter-button-color: $filter-button-normal-color;
                     &.toggled{
                         background-color: $filter-button-color;
+                        &::before{
+                            background-color: $filter-button-color;
+                        }
                     }
                 }
                 &.kill{
                     $filter-button-color: $filter-button-kill-color;
                     &.toggled{
                         background-color: $filter-button-color;
+                        &::before{
+                            background-color: $filter-button-color;
+                        }
                     }
                 }
                 &.logs{
                     $filter-button-color: $filter-button-logs-color;
                     &.toggled{
                         background-color: $filter-button-color;
+                        &::before{
+                            background-color: $filter-button-color;
+                        }
                     }
                 }
             }
