@@ -8,17 +8,25 @@ export enum ToggleType
     KILL='kill',
 }
 
+export enum ToggleAction
+    {
+    UPDATE_LIST,
+    TOGGLE_KILL_CREATE_IMAGE_BITMAP,
+}
+
 export interface ToggleButtonData
 {
     type: ToggleType,
     text: string,
+    action?: ToggleAction,
 }
 
 export class ToggleButton
 {
-    public updateList = new Signal();
     public div: HTMLDivElement;
+    public onClicked = new Signal();
 
+    private action: ToggleAction;
     private type: ToggleType;
     private text: string;
 
@@ -26,6 +34,7 @@ export class ToggleButton
     {
         this.type = data.type;
         this.text = data.text;
+        this.action = data.action || ToggleAction.UPDATE_LIST;
     }
 
     /**
@@ -58,7 +67,7 @@ export class ToggleButton
                 this.div.classList.add('toggled');
             }
 
-            this.updateList.emit();
+            this.onClicked.emit(this.action);
         };
     }
 

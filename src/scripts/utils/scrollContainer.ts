@@ -9,7 +9,7 @@ export interface ScrollableContainer extends HTMLDivElement
  * Makes an HTMLElement become scrollable
  * @param container - An HTMLElement that is to be made scrollable
  */
-export function convertToScrollContainer(container:ScrollableContainer): void
+export function convertToScrollContainer(container: ScrollableContainer): void
 {
     document.addEventListener('mousedown', (e: MouseEvent) =>
     {

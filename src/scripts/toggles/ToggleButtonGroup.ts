@@ -1,32 +1,43 @@
 import { Signal } from 'typed-signals';
 
-import { ToggleButton, ToggleType } from './ToggleButton';
+import { ToggleButton, ToggleButtonData } from './ToggleButton';
+
+export interface ToggleButtonGroupData
+{
+    text: string,
+    buttonsData: Record<string, ToggleButtonData>,
+}
 
 export class ToggleButtonGroup
 {
     public div: HTMLDivElement;
-    public textureButton = new ToggleButton({ type: ToggleType.NORMAL, text: 'Textures' });
-    public miscButton = new ToggleButton({ type: ToggleType.NORMAL, text: 'Misc' });
-    public bitmapButton = new ToggleButton({ type: ToggleType.KILL, text: 'Kill CIB' });
-    public activeButton = new ToggleButton({ type: ToggleType.ACTIVE, text: 'Active' });
-    public deletedButton = new ToggleButton({ type: ToggleType.DELETED, text: 'Deleted' });
+    public buttons: Record<string, ToggleButton>;
+    public onBtnClicked = new Signal();
 
-    public updateList = new Signal();
-    public updateCreateImageBitmap = new Signal();
+    private text: string;
+
+    constructor(data: ToggleButtonGroupData)
+    {
+        this.text = data.text;
+        this.buttons = {};
+
+        for (const key in data.buttonsData)
+        {
+            this.buttons[key] = new ToggleButton(data.buttonsData[key]);
+        }
+    }
 
     /**
      * Creates the html elements and initialises the buttons
      */
-    public init(): void
+    init(parent: HTMLDivElement): void
     {
         this.div = document.createElement('div');
         this.div.id = 'filter-buttons-group';
+        this.div.innerHTML = `<h4>${this.text}:</h4>`;
 
-        this.textureButton.init(this.div);
-        this.miscButton.init(this.div);
-        this.activeButton.init(this.div);
-        this.deletedButton.init(this.div);
-        this.bitmapButton.init(this.div);
+        Object.values(this.buttons).forEach((button) => button.init(this.div));
+        parent.appendChild(this.div);
     }
 
     /**
@@ -34,19 +45,19 @@ export class ToggleButtonGroup
      */
     public setupListeners(): void
     {
-        this.textureButton.setupListeners();
-        this.textureButton.updateList.connect(() => this.updateList.emit());
+        Object.values(this.buttons).forEach((button) =>
+        {
+            button.setupListeners();
+            button.onClicked.connect((action) => this.onBtnClicked.emit(action));
+        });
+    }
 
-        this.miscButton.setupListeners();
-        this.miscButton.updateList.connect(() => this.updateList.emit());
-
-        this.bitmapButton.setupListeners();
-        this.bitmapButton.updateList.connect(() => this.updateCreateImageBitmap.emit());
-
-        this.activeButton.setupListeners();
-        this.activeButton.updateList.connect(() => this.updateList.emit());
-
-        this.deletedButton.setupListeners();
-        this.deletedButton.updateList.connect(() => this.updateList.emit());
+    /**
+     * Returns a button from the group
+     * @param id - id of the button you want to get
+     */
+    public getButton(id: string): ToggleButton
+    {
+        return this.buttons[id];
     }
 }
