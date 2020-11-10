@@ -87,7 +87,7 @@ export class TextureMonitor
         )
         {
             sessionStorage.setItem(TextureMonitor.CIB_KEY, 'true');
-            this._optionsPanel.miscGroup.buttons.bitmap.div.classList.remove('toggled');
+            this._optionsPanel.miscGroup.getButton('bitmap').div.classList.remove('toggled');
         }
 
         this._setupListeners();
@@ -213,31 +213,28 @@ export class TextureMonitor
         };
 
         this._optionsPanel.setupListeners();
-        this._optionsPanel.onToggled.connect((action) => this._handleToggles(action));
+        this._optionsPanel.onBtnClick.connect((action) => this._handleToggles(action));
 
         convertToScrollContainer(this._cardWrapper);
     }
 
-    public _handleToggles(action: ToggleAction): void
+    private _handleToggles(action: ToggleAction): void
     {
-        if (action === ToggleAction.UPDATE_LIST)
+        switch (action)
         {
-            this._updateList();
-        }
-
-        if (action === ToggleAction.TOGGLE_KILL_CREATE_IMAGE_BITMAP)
-        {
-            this._updateCreateImageBitmap();
+            case ToggleAction.UPDATE_LIST:
+                this._updateList();
+                break;
+            case ToggleAction.TOGGLE_KILL_CREATE_IMAGE_BITMAP:
+                this._updateCreateImageBitmap();
+                break;
         }
     }
 
-    public _initCreateImageBitmap(): void
-    {
-        (window as any).defaultCreateImageBitmap = window.createImageBitmap;
-        this._updateCreateImageBitmap();
-    }
-
-    public _updateCreateImageBitmap(): void
+    /**
+     * toggles window.createImageBitmap on/off
+     */
+    private _updateCreateImageBitmap(): void
     {
         if (sessionStorage.getItem(TextureMonitor.CIB_KEY) === 'true')
         {
@@ -271,8 +268,8 @@ export class TextureMonitor
      */
     private _updateList(): void
     {
-        const deleted = this._optionsPanel.statusGroup.buttons.deleted.contains('toggled');
-        const active = this._optionsPanel.statusGroup.buttons.active.contains('toggled');
+        const deleted = this._optionsPanel.statusGroup.getButton('deleted').contains('toggled');
+        const active = this._optionsPanel.statusGroup.getButton('active').contains('toggled');
         let entities = document.querySelectorAll('.texture-entity');
 
         entities.forEach((entity: Element) =>
@@ -306,8 +303,8 @@ export class TextureMonitor
                 }
             };
 
-            cb(this._optionsPanel.typeGroup.buttons.texture, entity, 'type-texture');
-            cb(this._optionsPanel.typeGroup.buttons.misc, entity, 'type-misc');
+            cb(this._optionsPanel.typeGroup.getButton('texture'), entity, 'type-texture');
+            cb(this._optionsPanel.typeGroup.getButton('misc'), entity, 'type-misc');
         });
     }
 }

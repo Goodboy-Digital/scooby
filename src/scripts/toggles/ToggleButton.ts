@@ -23,13 +23,12 @@ export interface ToggleButtonData
 
 export class ToggleButton
 {
-    public updateList = new Signal();
     public div: HTMLDivElement;
-    action: ToggleAction;
-    type: ToggleType;
+    public onClicked = new Signal();
 
+    private action: ToggleAction;
+    private type: ToggleType;
     private text: string;
-    onToggled = new Signal();
 
     constructor(data: ToggleButtonData)
     {
@@ -68,7 +67,7 @@ export class ToggleButton
                 this.div.classList.add('toggled');
             }
 
-            this.onToggled.emit(this.action);
+            this.onClicked.emit(this.action);
         };
     }
 
