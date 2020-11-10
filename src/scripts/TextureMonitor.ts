@@ -224,6 +224,10 @@ export class TextureMonitor
         convertToResizeContainer(this._resizer, this._container);
     }
 
+    /**
+     * Handles the actions from the button clicks
+     * @param action - action type
+     */
     private _handleToggles(action: ToggleAction): void
     {
         switch (action)
