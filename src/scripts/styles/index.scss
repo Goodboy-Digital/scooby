@@ -25,6 +25,15 @@ $filter-button-deleted-color: rgb(233, 30, 99);
     padding: 0;
 }
 
+// Hack fix for the text style clashes for now [TODO: Please find a proper fix]
+// !important hack fixes will remain fine until we need text elements that require unique styling **
+h3, h4, p{
+    font-family: Arial, Helvetica, sans-serif !important;
+    color: $white-color !important;
+    line-height: initial !important;
+    letter-spacing: initial !important;
+}
+
 #texture-monitor-container{
     font-family: Arial, Helvetica, sans-serif;
     background-color: $background-color;
@@ -50,7 +59,6 @@ $filter-button-deleted-color: rgb(233, 30, 99);
         background-color: $primary-color;
         border-radius: 0.2em 0.2em 0 0;
         box-shadow: 0 -0.125em 0.4375em hsla(0, 0, 0, 0.3);
-        color: $white-color;
         display: flex;
         justify-content: center;
         align-content: center;
@@ -128,17 +136,16 @@ $filter-button-deleted-color: rgb(233, 30, 99);
                 background-color: rgb(66, 80, 101);
                 padding: 0.2em 0;
                 padding-left: 0.6em;;
-                color: $white-color;
                 border-radius: 0 0 0.1em 0.1em;
                 width: 100%;
 
                 h4{
-                    font-size: medium;
+                    font-size: medium !important;
                 }
 
                 h3{
                     span{
-                        font-size: medium;
+                        font-size: medium !important;
                     }
                 }
             }
@@ -146,10 +153,9 @@ $filter-button-deleted-color: rgb(233, 30, 99);
             .extra-info{
                 position: absolute;
                 top:0;
-                height: 10em;
+                height: 100%;
                 left: 0;
                 right: 0;
-                color: $white-color;
                 display: flex;
                 flex-direction: column;
                 align-items: center;
@@ -160,7 +166,7 @@ $filter-button-deleted-color: rgb(233, 30, 99);
                 text-align: center;
 
                 h3{
-                    font-size: medium;
+                    font-size: medium !important;
                     max-width: 9em;
                     word-wrap: break-word;
                 }
@@ -173,6 +179,7 @@ $filter-button-deleted-color: rgb(233, 30, 99);
                     border-radius: 0.1em;
                     transition: transform 0.1s ease-out;
                     cursor: pointer;
+                    color: $white-color;
 
                     &::before{
                         content: '';
@@ -201,7 +208,7 @@ $filter-button-deleted-color: rgb(233, 30, 99);
                 content: '';
                 position: absolute;
                 top:0;
-                height: 10em;
+                height: 100%;
                 left: 0;
                 right: 0;
                 background-color: hsla(0, 0, 0, 0.8);
@@ -257,13 +264,17 @@ $filter-button-deleted-color: rgb(233, 30, 99);
         position: relative;
         overscroll-behavior: contain;
         background-color: darken($background-color, 5%);
-        color: $white-color;
         box-shadow: inset 0 0 0.9em hsla(0, 0, 0, 0.5);
+
+        p{
+            font-size: initial !important;
+            font-weight: initial !important;
+        }
 
         #clear-button{
             position: fixed;
             top: 16px;
-            right: 2.5rem;
+            right: 40px;
             border-radius: 0 0 0.2em 0.2em;
             color: $white-color;
             $filter-button-color: rgb(109, 109, 109);
@@ -272,10 +283,10 @@ $filter-button-deleted-color: rgb(233, 30, 99);
             cursor: pointer;
             transform: translateY(0);
             transition: all 0.15s ease-out;
-            font-size: small;
-            font-weight: bold;
             opacity: 1;
             box-shadow: 0 0.125em 0.4375em hsla(0, 0, 0, 0.5);
+            font-size: small !important;
+            font-weight: bold !important;
 
             &::before{	
                 content: '';	
@@ -367,7 +378,6 @@ $filter-button-deleted-color: rgb(233, 30, 99);
 
             & > h4{
                 display: inline-block;
-                color: $white-color;
                 margin: 0.5em;
                 font-size: small;
             }
@@ -383,7 +393,6 @@ $filter-button-deleted-color: rgb(233, 30, 99);
                 align-items: center;
                 justify-content: center;
                 border-radius: 3.2px 3.2px 0 0;
-                color: $white-color;
                 $filter-button-color: rgb(109, 109, 109);
                 background-color: $filter-button-color;
                 position: relative;
@@ -392,6 +401,11 @@ $filter-button-deleted-color: rgb(233, 30, 99);
                 transform: translateY(0);
                 transition: all 0.15s ease-out;
                 font-size: small;
+
+                & > h4{
+                    font-family: Arial, Helvetica, sans-serif !important;
+                    font-size: small !important;
+                }
 
                 &:last-child{
                     margin-bottom: 0;
@@ -483,7 +497,7 @@ $filter-button-deleted-color: rgb(233, 30, 99);
     }
 
     h3{
-        font-size: medium;
+        font-size: medium !important;
     }
 
     &.toggled{
