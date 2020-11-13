@@ -1,4 +1,4 @@
-import { LogsPanel } from './LogsPanel';
+import { LogsPanel, MessageColor } from './LogsPanel';
 import { TextureCard } from './TextureCard';
 import { OptionsPanel } from './toggles/OptionsPanel';
 import { ToggleAction, ToggleButton } from './toggles/ToggleButton';
@@ -202,15 +202,34 @@ export class TextureMonitor
         {
             this._toAdd.push(data.cardHolder);
         }
+
+        let info = args[5];
+
+        if (info.src)
+        {
+            info = info.src;
+        }
+
+        this.log(`texture uploaded:`, MessageColor.BLUE);
+        this.log(info);
     }
 
     /**
      * Logs a message to the built in console
-     * @param message - message to be logged
+     * @param text - message to be logged
      */
-    public log(message:string): void
+    public log(text:string|Record<string, any>, color: string | string[] = MessageColor.WHITE): void
     {
-        this._logsPanel.log(message);
+        if (!this._initialized)
+        {
+            LogsPanel.initialLogs.push({
+                text: text === typeof 'string' ? text : JSON.stringify(text, null, 2),
+                color,
+            });
+
+            return;
+        }
+        this._logsPanel.log(text, color);
     }
 
     /**

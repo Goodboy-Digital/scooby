@@ -1,7 +1,7 @@
-# Scooby
+# Scooby WebGL
 
 A GUI tool to monitor life-cycles of WebGL textures and resulted GPU load in real-time.
-___
+
 ## Getting Started
 
 ### Chrome Extension
@@ -43,9 +43,9 @@ The logging tab contains a simple logger that will show any message sent to it.
 Npm users will have access to the global `SCOOBY` object with `window.SCOOBY`.
 Using this you can log to the console with
 
-`window.SCOOBY.log('hello')`
+`window.SCOOBY.log('hello', '#FF0000)`
 
-The "clear" button will remove
+The "clear" button will remove all logs.
 
 ## Building Locally
 There are 4 build commands. `build` will generate both the chrome extension and the `npm` package.
