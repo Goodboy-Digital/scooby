@@ -155,6 +155,8 @@ export class TextureMonitor
         {
             this._memorySizeText.innerHTML = `<span>${calculateSize(this._textureMap)}</span>`;
         }
+
+        this._updateList();
     }
 
     /**
@@ -212,6 +214,8 @@ export class TextureMonitor
 
         this.log(`texture uploaded:`, MessageColor.BLUE);
         this.log(info);
+
+        this._updateList();
     }
 
     /**
