@@ -3,6 +3,7 @@
 /* eslint-disable camelcase */
 import './styles/index.scss';
 
+import { MessageColor } from './LogsPanel';
 import { TextureMonitor } from './TextureMonitor';
 import { getContextType } from './utils/document/getContextType';
 import { generateFormatMap } from './utils/maps/generateFormatMap';
@@ -63,6 +64,37 @@ HTMLCanvasElement.prototype.getContext = function ()
         const typeMap: Record<GLenum, number> = generateTypeMap(gl);
         const formatMap: Record<GLenum, number> = generateFormatMap(gl);
         const getTextureMap:Record<GLenum, GLenum> = generateTextureMap(gl);
+
+        gl.createProgram = function ()
+        {
+            textureMonitor.log('program created', MessageColor.WHITE);
+
+            return RenderingContext.createProgram.apply(this, arguments);
+        };
+
+        gl.texSubImage2D = function ()
+        {
+            textureMonitor.log('sub texture created', MessageColor.WHITE);
+
+            return RenderingContext.texSubImage2D.apply(this, arguments);
+        };
+
+        if (gl instanceof WebGL2RenderingContext)
+        {
+            gl.createVertexArray = function ()
+            {
+                textureMonitor.log('VAO created', MessageColor.YELLOW);
+
+                return (RenderingContext as WebGL2RenderingContext).createVertexArray.apply(this, arguments);
+            };
+        }
+
+        gl.bufferData = function ()
+        {
+            textureMonitor.log('buffer data uploaded', MessageColor.GREEN);
+
+            return RenderingContext.bufferData.apply(this, arguments);
+        };
 
         // TODO - There will be an issue with cube textures for sure!
         gl.createTexture = function ()

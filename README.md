@@ -1,4 +1,4 @@
-# Scooby
+# Scooby WebGL
 
 A GUI tool to monitor life-cycles of WebGL textures and resulted GPU load in real-time.
 ___

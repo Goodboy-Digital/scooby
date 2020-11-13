@@ -2,14 +2,15 @@ import { OptionsPanel } from './toggles/OptionsPanel';
 
 export const MessageColor = {
     WHITE: '#FFFFFF',
-    YELLOW: '#FFCC00',
-    BLUE: '#0000FF',
-    PINK: '#ff66a5',
-    RED: '#FF0000',
+    YELLOW: '#E6BE2E',
+    GREEN: '#009688',
+    BLUE: '#2196f3',
+    RED: '#E91E63',
     RAINBOW: ['#F60000', '#F60000', '#FF8C00', '#FFEE00', '#4DE94C', '#3783FF', '#4815AA'],
-}
+};
 
-export interface Message {
+export interface Message
+{
     text: string,
     color: string | string[];
 }
@@ -24,6 +25,8 @@ export class LogsPanel
 
     private _optionsPanel: OptionsPanel;
     private wrapper: HTMLDivElement;
+
+    static initialLogs: Message[] = [];
 
     public init(_optionsPanel: OptionsPanel, wrapper: HTMLDivElement): void
     {
@@ -47,14 +50,9 @@ export class LogsPanel
         this._optionsPanel.miscGroup.getButton('logs').div.classList.remove('toggled');
         this.toggle();
 
-        this.log('Welcome to Scooby!', MessageColor.RAINBOW);
-        this.log('Use window.SCOOBY.log(MESSAGE) to see messages here', MessageColor.YELLOW);
-        this.log('TEST NORMAL MESSAGE');
-        this.log('TEST COLORED MESSAGE', MessageColor.RED);
-        this.log('TEST COLORED MESSAGE', MessageColor.BLUE);
-        this.log('TEST COLORED MESSAGE', MessageColor.PINK);
-        this.log('TEST COLORED MESSAGE', [MessageColor.RED, MessageColor.BLUE]);
-        this.log('TEST COLORED MESSAGE', [MessageColor.RED, MessageColor.BLUE, MessageColor.PINK]);
+        this.log('Welcome to Scooby!', MessageColor.BLUE);
+        LogsPanel.initialLogs.forEach((log) => this.log(log.text, log.color));
+        LogsPanel.initialLogs = [];
     }
 
     /**
@@ -62,12 +60,12 @@ export class LogsPanel
      * @param message - message to be logged
      * @param color - color or shade of colors to be styled
      */
-    public log(text: string, color: string | string[] = MessageColor.WHITE): void
+    public log(text: string|Record<string, any>, color: string | string[] = MessageColor.WHITE): void
     {
         const message: Message = {
-            text,
+            text: text === typeof 'string' ? text : JSON.stringify(text, null, 2),
             color,
-        }
+        };
 
         this._logs.push(message);
         this._updateLogs();
@@ -96,7 +94,7 @@ export class LogsPanel
 
             if (typeof message.color === 'object')
             {
-                let output = "";
+                let output = '';
 
                 message.color.forEach((color, index) =>
                 {
@@ -114,8 +112,9 @@ export class LogsPanel
             {
                 style = `color: ${message.color};`;
             }
-            
-            accumulator += `[${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}] <span style='${style}'>${message.text}</span><br><br>`;
+
+            accumulator += `[${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}]`
+            + ` <span style='${style}'>${message.text}</span><br><br>`;
         });
 
         this._text.innerHTML = accumulator;
