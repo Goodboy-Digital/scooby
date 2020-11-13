@@ -1,37 +1,58 @@
-# WebGL Texture Monitor
+# Scooby
 
 A GUI tool to monitor life-cycles of WebGL textures and resulted GPU load in real-time.
 ___
 ## Getting Started
 
-### Prerequisites
+### Chrome Extension
 
-Please install [pixi.js](https://github.com/pixijs/pixi.js) library as it will be needed in the texture-monitor script.
-```
-npm install pixi.js
-```
-### Installing Texture Monitor
-Move the **TextureMonitor** folder into your source folder and import the **texture-monitor.ts** *(or the already compiled .js if you don't have [ts-loader](https://github.com/TypeStrong/ts-loader) for webpack or equivalent)* into your entry JS script.
+`TODO: Link here`
+Add this as a chrome extension, then navigate to any page you want to inspect. Click the extension icon and the page should reload and start monitoring for you.
 
-**main.js**
-```javascript
-import '../utils/texture-monitor.ts';
-```
-```javascript
-import '../utils/texture-monitor.js';
-```
-If you don't have webpack [sass-loader](https://github.com/webpack-contrib/sass-loader) or equivalent, please consider importing the **textureMonitor.css** directly in the texture-monitor.js instead of .scss<br/>
+### NPM
 
-**texture-monitor.ts**
-```javascript
-import '../../styles/textureMonitor.css';
-```
-### Add as a Chrome Extension
+`npm i -D @goodboydigital/scooby`
+`import '@goodboydigital/scooby`
 
-*[ Work currently in progress..... ]*
-___
 ## Using Texture Monitor
 
-The texture monitor tab is minimised at the bottom left corner of the page by default where the textures' **GPU usage footprint** is displayed. The tab can be toggled to inspect the individual textures behind the scene.
+The texture monitor tab is minimised at the bottom left corner of the page by default. The tab can be toggled to inspect the individual textures behind the scene.
 
-For Chrome users, please stay tuned for the **chrome extension**.
+### Tabs
+
+#### Texture / Other
+You can toggle these to filter the list displayed to you.
+
+#### Active / Deleted
+You can toggle these to filter the list displayed to you.
+
+`Active` textures are textures currently loaded onto the GPU.
+
+`Deleted` textures are any texture that was on the GPU but have since been removed.
+
+#### Kill `createImageBitmap`
+Currently we cant create a texture when `createImageBitmap` is used. In order to get around this you can toggle this button and `createImageBitmap` will be set to `null`
+
+We assume that you have alternative ways of creating an image if this function is not available.
+
+This option is saved into `SessionStorage` so that when you reload it will be `null` if previously set to that. This allows images created on load to be captured
+
+#### Logs
+The logging tab contains a simple logger that will show any message sent to it.
+
+Npm users will have access to the global `SCOOBY` object with `window.SCOOBY`.
+Using this you can log to the console with
+
+`window.SCOOBY.log('hello')`
+
+The "clear" button will remove
+
+## Building Locally
+There are 4 build commands. `build` will generate both the chrome extension and the `npm` package.
+```
+"build"
+"build:npm"
+"build:chrome"
+"watch:npm"
+```
+There is currently only 1 `watch` option and that is for building the `npm` version of this package
