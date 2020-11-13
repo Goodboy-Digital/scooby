@@ -24,6 +24,8 @@ TextureMonitor.overrideCreateImageBitmap();
 const textureMonitor = new TextureMonitor();
 const __Origin_EXTENSION_GetContext = HTMLCanvasElement.prototype.getContext;
 
+window.SCOOBY = textureMonitor;
+
 (HTMLCanvasElement.prototype as OverrideHTMLCanvasElement).__Origin_EXTENSION_GetContext = __Origin_EXTENSION_GetContext;
 
 HTMLCanvasElement.prototype.getContext = function ()

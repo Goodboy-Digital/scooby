@@ -1,3 +1,4 @@
+import { LogsPanel } from './LogsPanel';
 import { TextureCard } from './TextureCard';
 import { OptionsPanel } from './toggles/OptionsPanel';
 import { ToggleAction, ToggleButton } from './toggles/ToggleButton';
@@ -12,6 +13,7 @@ declare global
     interface Window
     {
         defaultCreateImageBitmap: typeof window.createImageBitmap
+        SCOOBY: TextureMonitor
     }
 }
 
@@ -35,6 +37,7 @@ export class TextureMonitor
     private _cardWrapper: HTMLDivElement;
     private _memorySizeText: HTMLHeadingElement;
     private _toggleArrow: HTMLHeadingElement;
+    private _logsPanel: LogsPanel;
     private _optionsPanel: OptionsPanel;
     private _initialized = false;
     private _toAdd: Array<HTMLDivElement> = [];
@@ -66,9 +69,11 @@ export class TextureMonitor
         this._cardWrapper = document.createElement('div');
         this._memorySizeText = document.createElement('h3');
         this._toggleArrow = document.createElement('h3');
+        this._logsPanel = new LogsPanel();
         this._optionsPanel = new OptionsPanel();
 
         this._optionsPanel.init();
+        this._logsPanel.init(this._optionsPanel, this._cardWrapper);
         this._toggle.classList.add('monitor-toggle');
         this._resizer.id = 'resizer';
         this._container.id = 'texture-monitor-container';
@@ -84,6 +89,7 @@ export class TextureMonitor
         this._container.appendChild(this._toggle);
         this._container.appendChild(this._resizer);
         this._container.appendChild(this._cardWrapper);
+        this._container.appendChild(this._logsPanel.div);
         this._container.appendChild(this._optionsPanel.div);
 
         if (
@@ -95,10 +101,9 @@ export class TextureMonitor
             this._optionsPanel.miscGroup.getButton('bitmap').div.classList.remove('toggled');
         }
 
-        this._setupListeners();
-
         this._initialized = true;
 
+        this._setupListeners();
         this._firstList();
     }
 
@@ -200,6 +205,15 @@ export class TextureMonitor
     }
 
     /**
+     * Logs a message to the built in console
+     * @param message - message to be logged
+     */
+    public log(message:string): void
+    {
+        this._logsPanel.log(message);
+    }
+
+    /**
      * sets up listeners for the toggle buttons
      * and sets the cardWrapper to be scrollable
      */
@@ -237,6 +251,9 @@ export class TextureMonitor
                 break;
             case ToggleAction.TOGGLE_KILL_CREATE_IMAGE_BITMAP:
                 this._updateCreateImageBitmap();
+                break;
+            case ToggleAction.TOGGLE_LOGS:
+                this._logsPanel.toggle();
                 break;
         }
     }
