@@ -4,7 +4,7 @@
     "version": "1.0.0",
     "description": "WebGL GUI texture monitoring tool for web content",
     "author":"Goodboy Digital",
-    "permissions": ["tabs", "storage", "http://*/*", "https://*/*"],
+    "permissions": ["tabs", "http://*/*", "https://*/*"],
     "page_action": {
         "default_icon": "icons/icon-off.png",
         "default_title": "Inspect with TextureMonitor"
