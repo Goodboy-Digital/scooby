@@ -35,7 +35,7 @@
     "@rollup/plugin-commonjs": "^16.0.0",
     "@rollup/plugin-node-resolve": "^10.0.0",
     "eslint": "^7.13.0",
-    "node-sass": "^6.0.0",
+    "node-sass": "^7.0.0",
     "pre-commit": "^1.2.2",
     "rimraf": "3.0.2",
     "rollup": "^2.33.1",
