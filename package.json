@@ -1,6 +1,6 @@
 {
   "name": "@play-co/scooby",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "WebGL GUI texture monitoring tool for web content",
   "main": "dist/esm/TextureMonitor.js",
   "module": "dist/esm/TextureMonitor.js",
